@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>البروفايل الشخصي - Electron Vision</title>
+<link rel="icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background: #0b0b0d;
+    color: #fff;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ذيل ضوئي نيون */
+.trail {
+    position: fixed;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(0, 140, 255, 0.8);
+    filter: blur(10px);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* شريط تنقل */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(15, 15, 20, 0.65);
+    backdrop-filter: blur(8px);
+    padding: 15px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    z-index: 2000;
+    box-sizing: border-box;
+}
+
+/* العنوان */
+nav .title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #f4e6c1;
+}
+
+/* أيقونة البروفايل */
+nav .profile {
+    position: absolute;
+    top: 50%;
+    left: 440px;
+    transform: translate(-50%, -50%);
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #008cff, #00aaff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 20px rgba(0,140,255,0.4);
+    animation: profilePulse 2s ease-in-out infinite;
+}
+
+nav .profile.profile-appear {
+    animation: profileAppear 0.8s ease-out forwards, profilePulse 2s ease-in-out 0.8s infinite;
+}
+
+/* أنيميشن ظهور الأيقونة */
+@keyframes profileAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5) rotate(-180deg);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+}
+
+nav .profile:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 30px rgba(0,140,255,0.6);
+    border-color: rgba(255,255,255,0.4);
+}
+
+nav ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: static;
+    background: transparent;
+    clip-path: none;
+}
+
+nav ul li {
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: 0.25s;
+}
+
+nav ul li:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+/* فراغ فوق المحتوى */
+.spacer {
+    height: 85px;
+}
+
+/* أحرف خلفية */
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+.letter {
+    position: absolute;
+    font-size: 3.8rem;
+    font-weight: bold;
+    color: rgba(255, 215, 0, 0.10);
+    animation: float 10s linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateY(120vh) rotate(0deg); }
+    to { transform: translateY(-20vh) rotate(360deg); }
+}
+
+/* هيرو */
+.hero {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+.hero h1 {
+    font-size: 2.5rem;
+    color: #ffe9b0;
+    margin-bottom: 10px;
+}
+.hero p {
+    opacity: 0.85;
+    font-size: 1.1rem;
+}
+
+/* حواف مضيئة */
+.glow-box {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.04);
+    padding: 40px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 16px rgba(96, 180, 255, 0.22);
+}
+
+/* ================= PROFILE SECTION ================= */
+.profile-content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.profile-avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    min-width: 200px;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #008cff, #00aaff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #fff;
+    border: 3px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 30px rgba(0,140,255,0.4);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0,140,255,0.6);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-field label {
+    font-weight: bold;
+    color: #f4e6c1;
+    font-size: 1rem;
+}
+
+.profile-field input,
+.profile-field textarea {
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.profile-field input:focus,
+.profile-field textarea:focus {
+    outline: none;
+    border-color: #008cff;
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 0 15px rgba(0,140,255,0.3);
+}
+
+.profile-field input[readonly] {
+    background: rgba(255,255,255,0.05);
+    cursor: not-allowed;
+}
+
+.profile-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.profile-btn {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    min-width: 140px;
+}
+
+.profile-btn.primary {
+    background: linear-gradient(135deg, #008cff, #00aaff);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0,140,255,0.3);
+}
+
+.profile-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0,140,255,0.5);
+}
+
+.profile-btn.secondary {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.profile-btn.secondary:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.4);
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width: 768px) {
+    .profile-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        font-size: 3rem;
+    }
+
+    .profile-avatar-section {
+        min-width: auto;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .glow-box {
+        width: 95%;
+        padding: 25px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+}
+
+/* همبرغر */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 3000;
+}
+.hamburger span {
+    width: 26px;
+    height: 3px;
+    background: #f4e6c1;
+    border-radius: 4px;
+    transition: 0.35s ease;
+}
+
+/* عند الفتح */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+@media (max-width: 980px) {
+    /* إظهار زر الهمبرغر */
+    .hamburger {
+        display: flex;
+    }
+
+    /* تحويل القائمة لمخفية */
+    nav ul {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+
+        background: rgba(8,8,12,0.97);
+        backdrop-filter: blur(14px);
+        padding: 24px 0;
+
+        clip-path: circle(0% at 95% 0%);
+        transition: clip-path 0.55s ease-in-out;
+
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        z-index: 2500;
+    }
+
+    /* عند الفتح */
+    nav ul.show {
+        clip-path: circle(160% at 95% 0%);
+    }
+
+    nav ul li {
+        padding: 12px;
+        font-size: 1.05rem;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ================= LIGHT THEME ================= */
+:root[data-theme="light"] {
+  /* الخلفيات */
+  --bg-main: #f4f7fb;
+  --bg-nav: rgba(255,255,255,0.78);
+  --bg-card: rgba(255,255,255,0.65);
+  --bg-soft: #eef2f7;
+
+  /* النصوص */
+  --text-main: #4b73a5;
+  --text-muted: #5f6b7a;
+  --text-nav: #1c2430;
+
+  /* ألوان تقنية */
+  --blue-main: #2563eb;
+  --blue-soft: rgba(37,99,235,0.12);
+  --blue-glow: rgba(37,99,235,0.35);
+
+  /* حدود وظلال */
+  --border-light: rgba(15,23,42,0.08);
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
+  --shadow-strong: 0 20px 50px rgba(15,23,42,0.12);
+}
+
+/* ================= BODY ================= */
+:root[data-theme="light"] body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ================= NAV ================= */
+:root[data-theme="light"] nav {
+  background: var(--bg-nav);
+  border-bottom: 1px solid var(--border-light);
+  backdrop-filter: blur(14px);
+}
+
+:root[data-theme="light"] nav .title {
+  color: var(--text-main);
+}
+
+/* ================= NAV ITEMS ================= */
+:root[data-theme="light"] nav ul li {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] nav ul li:hover {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+/* ================= PROFILE ================= */
+:root[data-theme="light"] nav .profile {
+  background: var(--blue-main);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+}
+
+/* ================= HERO ================= */
+:root[data-theme="light"] .hero h1 {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .hero p {
+  color: var(--text-muted);
+}
+
+/* ================= GLOW BOX ================= */
+:root[data-theme="light"] .glow-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+/* ================= ITEMS ================= */
+:root[data-theme="light"] .item {
+  background: var(--bg-soft);
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .item:hover {
+  background: var(--blue-main);
+  color: #fff;
+}
+
+/* ================= LAMP ================= */
+.lamp-wrapper {
+  position: fixed;
+  left: 26px;
+  top: 0;
+  z-index: 5000;
+  user-select: none;
+    pointer-events: none;
+}
+
+.lamp-cord {
+  width: 3px;
+  height: 130px;
+  background: linear-gradient(#444, #111);
+  margin: auto;
+  transition: height 0.25s ease;
+}
+
+.lamp-head {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  cursor: grab;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,0.7),
+    0 0 12px rgba(0,0,0,0.6);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+      pointer-events: auto;
+}
+
+/* أنيميشن ظهور العناصر عند النزول */
+.fade-in-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s ease-out;
+}
+
+.fade-in-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s ease-out;
+}
+
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.fade-in-left.animate,
+.fade-in-right.animate,
+.fade-in-up.animate {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+}
+
+/* ===== Hover خفيف ===== */
+.lamp-head:hover {
+  transform: scale(1.05);
+}
+</style>
+</head>
+<body>
+
+    <!-- Lamp Toggle -->
+<div class="lamp-wrapper">
+  <div class="lamp-cord"></div>
+  <div class="lamp-head"></div>
+</div>
+
+<!-- ذيل النيون -->
+<div id="trail-container"></div>
+
+<nav>
+    <div class="title">Electron Vision</div>
+        <span class="verified-badge">✓</span>
+
+    <!-- زر همبرغر -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- القائمة -->
+    <ul id="nav-links">
+        <li onclick="go('index.html')">الرئيسية</li>
+        <li onclick="go('products.html')">المنتجات</li>
+        <li onclick="go('store.html')">المتجر</li>
+        <li onclick="go('services.html')">خدماتنا</li>
+        <li onclick="go('support.html')">الدعم السريع</li>
+        <li onclick="go('social.html')">وسائل التواصل</li>
+        <li onclick="go('contact.html')">تواصل</li>
+        <li id="login-btn" onclick="go('login.html')">تسجيل</li>
+    </ul>
+
+    <!-- بروفايل -->
+    <div id="profile" class="profile" style="display:none;"></div>
+</nav>
+
+<div class="spacer"></div>
+
+<!-- الخلفية -->
+<div class="bg" id="bg"></div>
+
+<section class="hero">
+    <h1>البروفايل الشخصي</h1>
+    <p>إدارة معلوماتك الشخصية وتخصيص حسابك</p>
+</section>
+
+<!-- البروفايل -->
+<div class="glow-box fade-in-up">
+    <div class="profile-content">
+        <div class="profile-avatar-section">
+            <div class="profile-avatar" id="profileAvatar">
+                <span id="profileInitial"></span>
+            </div>
+        </div>
+        <div class="profile-info">
+            <div class="profile-field">
+                <label data-key="profile_name">الاسم:</label>
+                <input type="text" id="profileName" placeholder="أدخل اسمك">
+            </div>
+            <div class="profile-field">
+                <label data-key="profile_email">البريد الإلكتروني:</label>
+                <input type="email" id="profileEmail" readonly>
+            </div>
+            <div class="profile-field">
+                <label data-key="profile_phone">الهاتف:</label>
+                <input type="tel" id="profilePhone" placeholder="رقم الهاتف">
+            </div>
+            <div class="profile-field">
+                <label data-key="profile_bio">نبذة:</label>
+                <textarea id="profileBio" placeholder="اكتب نبذة عن نفسك" rows="4"></textarea>
+            </div>
+            <div class="profile-actions">
+                <button class="profile-btn primary" onclick="saveProfile()" data-key="profile_save">حفظ التغييرات</button>
+                <button class="profile-btn secondary" onclick="resetProfile()" data-key="profile_reset">إعادة تعيين</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* أحرف الخلفية */
+const letters = ["E","L","C","T","R","O","N","V"];
+const bg = document.getElementById("bg");
+for (let i = 0; i < 30; i++) {
+    let s = document.createElement("span");
+    s.className = "letter";
+    s.innerText = letters[Math.floor(Math.random()*letters.length)];
+    s.style.left = Math.random()*100 + "vw";
+    s.style.animationDuration = (7 + Math.random()*6) + "s";
+    bg.appendChild(s);
+}
+
+/* وظيفة الانتقال */
+function go(page) {
+    window.location.href = page;
+}
+
+/* ذيل النيون */
+const trailContainer = document.getElementById("trail-container");
+const navHeight = 80;
+
+window.addEventListener("mousemove", (e) => {
+    if (e.clientY < navHeight + 10) return;
+
+    let dot = document.createElement("div");
+    dot.className = "trail";
+    dot.style.left = e.clientX + "px";
+    dot.style.top = e.clientY + "px";
+    trailContainer.appendChild(dot);
+
+    setTimeout(() => { dot.remove(); }, 320);
+});
+
+/* التحقق من تسجيل الدخول عند تحميل الصفحة */
+window.addEventListener("DOMContentLoaded", () => {
+    checkAuthStatus();
+    initScrollAnimations();
+});
+
+/* أنيميشن العناصر عند النزول */
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, observerOptions);
+
+    // مراقبة العناصر التي تحتوي على كلاسات الأنيميشن
+    document.querySelectorAll('.fade-in-left, .fade-in-right, .fade-in-up').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+async function checkAuthStatus() {
+    try {
+        const response = await fetch("/auth/status", {
+            credentials: "include"
+        });
+        const data = await response.json();
+
+        const loginBtn = document.getElementById("login-btn");
+        const profile = document.getElementById("profile");
+
+        if (data.loggedIn) {
+            // المستخدم مسجل دخول
+            loginBtn.style.display = "none";
+            profile.style.display = "flex";
+            profile.innerText = data.email.charAt(0).toUpperCase();
+            profile.title = data.email;
+            profile.classList.add("profile-appear");
+
+            // تحميل بيانات البروفايل
+            loadProfile();
+
+            // إضافة قائمة منسدلة للبروفايل
+            profile.onclick = showProfileMenu;
+        } else {
+            // المستخدم غير مسجل دخول - إعادة توجيه لصفحة تسجيل الدخول
+            alert("يجب تسجيل الدخول أولاً لعرض البروفايل");
+            window.location.href = "login.html";
+        }
+    } catch (error) {
+        console.error("خطأ في التحقق من حالة الدخول:", error);
+        alert("حدث خطأ في التحقق من تسجيل الدخول");
+        window.location.href = "login.html";
+    }
+}
+
+function showProfileMenu() {
+    // إنشاء قائمة منسدلة للبروفايل
+    let menu = document.getElementById("profile-menu");
+    if (menu) {
+        menu.remove();
+        return;
+    }
+
+    menu = document.createElement("div");
+    menu.id = "profile-menu";
+    menu.innerHTML = `
+        <div class="profile-menu-item" onclick="go('profile.html')">البروفايل</div>
+        <div class="profile-menu-item" onclick="logout()">تسجيل الخروج</div>
+    `;
+    menu.style.cssText = `
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: rgba(15,15,20,0.95);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 8px 0;
+        min-width: 150px;
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    `;
+
+    const menuItems = menu.querySelectorAll(".profile-menu-item");
+    menuItems.forEach(item => {
+        item.style.cssText = `
+            padding: 12px 16px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            transition: 0.2s;
+        `;
+        item.onmouseover = () => item.style.background = "rgba(255,255,255,0.1)";
+        item.onmouseout = () => item.style.background = "transparent";
+    });
+
+    document.body.appendChild(menu);
+
+    // إغلاق القائمة عند النقر خارجها
+    setTimeout(() => {
+        document.addEventListener("click", function closeMenu(e) {
+            if (!menu.contains(e.target) && e.target !== document.getElementById("profile")) {
+                menu.remove();
+                document.removeEventListener("click", closeMenu);
+            }
+        });
+    }, 10);
+}
+
+async function logout() {
+    try {
+        const response = await fetch("/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+        const data = await response.json();
+
+        if (data.ok) {
+            // إعادة توجيه للصفحة الرئيسية
+            window.location.href = "index.html";
+        } else {
+            alert("خطأ في تسجيل الخروج");
+        }
+    } catch (error) {
+        console.error("خطأ:", error);
+        alert("حدث خطأ في تسجيل الخروج");
+    }
+}
+
+/* ================= PROFILE FUNCTIONS ================= */
+async function loadProfile() {
+    try {
+        const response = await fetch("/auth/status", { credentials: "include" });
+        const data = await response.json();
+
+        if (data.loggedIn) {
+            const profile = data.profile || {};
+
+            // تحديث معلومات البروفايل
+            document.getElementById("profileName").value = profile.name || "";
+            document.getElementById("profileEmail").value = data.email;
+            document.getElementById("profilePhone").value = profile.phone || "";
+            document.getElementById("profileBio").value = profile.bio || "";
+
+            // تحديث الصورة
+            updateProfileAvatar(profile.avatar, data.email);
+        }
+    } catch (error) {
+        console.error("خطأ في تحميل البروفايل:", error);
+    }
+}
+
+function updateProfileAvatar(avatarUrl, email) {
+    const avatarDiv = document.getElementById("profileAvatar");
+    const initialSpan = document.getElementById("profileInitial");
+
+    if (avatarUrl) {
+        avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="صورة البروفايل">`;
+    } else {
+        avatarDiv.innerHTML = `<span id="profileInitial">${email.charAt(0).toUpperCase()}</span>`;
+    }
+}
+
+async function saveProfile() {
+    const name = document.getElementById("profileName").value.trim();
+    const phone = document.getElementById("profilePhone").value.trim();
+    const bio = document.getElementById("profileBio").value.trim();
+
+    const saveBtn = document.querySelector(".profile-btn.primary");
+    const originalText = saveBtn.textContent;
+    saveBtn.textContent = "جاري الحفظ...";
+    saveBtn.disabled = true;
+
+    try {
+        const response = await fetch("/profile/update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ name, phone, bio })
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            alert("تم حفظ التغييرات بنجاح!");
+            loadProfile(); // إعادة تحميل البيانات
+        } else {
+            alert(data.error || "حدث خطأ في حفظ البيانات");
+        }
+    } catch (error) {
+        console.error("خطأ:", error);
+        alert("حدث خطأ في الاتصال بالسيرفر");
+    } finally {
+        saveBtn.textContent = originalText;
+        saveBtn.disabled = false;
+    }
+}
+
+function resetProfile() {
+    if (confirm("هل أنت متأكد من إعادة تعيين جميع البيانات؟")) {
+        document.getElementById("profileName").value = "";
+        document.getElementById("profilePhone").value = "";
+        document.getElementById("profileBio").value = "";
+    }
+}
+
+// معالج رفع الصورة
+document.getElementById("avatarInput").addEventListener("change", async function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // التحقق من نوع الملف
+    if (!file.type.startsWith("image/")) {
+        alert("يرجى اختيار ملف صورة صحيح");
+        return;
+    }
+
+    // التحقق من حجم الملف (حد أقصى 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+        alert("حجم الصورة كبير جداً. الحد الأقصى 5MB");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    const uploadBtn = document.querySelector(".profile-avatar-section .profile-btn");
+    const originalText = uploadBtn.textContent;
+    uploadBtn.textContent = "جاري الرفع...";
+    uploadBtn.disabled = true;
+
+    try {
+        const response = await fetch("/profile/upload-avatar", {
+            method: "POST",
+            credentials: "include",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            alert("تم رفع الصورة بنجاح!");
+            updateProfileAvatar(data.avatar, document.getElementById("profileEmail").value);
+        } else {
+            alert(data.error || "حدث خطأ في رفع الصورة");
+        }
+    } catch (error) {
+        console.error("خطأ:", error);
+        alert("حدث خطأ في رفع الصورة");
+    } finally {
+        uploadBtn.textContent = originalText;
+        uploadBtn.disabled = false;
+        // إعادة تعيين input للسماح باختيار نفس الصورة مرة أخرى
+        e.target.value = "";
+    }
+});
+
+function toggleMenu() {
+    const nav = document.getElementById("nav-links");
+    const burger = document.querySelector(".hamburger");
+
+    nav.classList.toggle("show");
+    burger.classList.toggle("active");
+}
+document.querySelectorAll("#nav-links li").forEach(li => {
+    li.addEventListener("click", () => {
+        document.getElementById("nav-links").classList.remove("show");
+        document.querySelector(".hamburger").classList.remove("active");
+    });
+});
+</script>
+
+<script>
+const lamp = document.querySelector(".lamp-head");
+const cord = document.querySelector(".lamp-cord");
+const root = document.documentElement;
+
+let pulling = false;
+let startY = 0;
+
+/* تحميل الثيم المحفوظ */
+async function loadTheme() {
+    try {
+        const authRes = await fetch("/auth/status", { credentials: "include" });
+        const auth = await authRes.json();
+        if (auth.loggedIn) {
+            const themeRes = await fetch("/api/user-theme", { credentials: "include" });
+            const themeData = await themeRes.json();
+            root.setAttribute("data-theme", themeData.theme);
+        } else {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                root.setAttribute("data-theme", savedTheme);
+            }
+        }
+    } catch (e) {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            root.setAttribute("data-theme", savedTheme);
+        }
+    }
+}
+loadTheme();
+
+lamp.addEventListener("mousedown", e => {
+  pulling = true;
+  startY = e.clientY;
+  lamp.style.cursor = "grabbing";
+});
+
+window.addEventListener("mousemove", e => {
+  if (!pulling) return;
+
+  let distance = e.clientY - startY;
+  if (distance < 0) distance = 0;
+  if (distance > 120) distance = 120;
+
+  lamp.style.transform = `translateY(${distance}px)`;
+  cord.style.height = 130 + distance + "px";
+});
+
+window.addEventListener("mouseup", () => {
+  if (!pulling) return;
+  pulling = false;
+
+  lamp.style.transform = "translateY(0)";
+  cord.style.height = "130px";
+  lamp.style.cursor = "grab";
+
+  /* تبديل الثيم */
+  const current = root.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  root.setAttribute("data-theme", next);
+  
+  // حفظ الثيم
+  fetch("/auth/status", { credentials: "include" })
+    .then(res => res.json())
+    .then(auth => {
+        if (auth.loggedIn) {
+            fetch("/api/user-theme", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ theme: next })
+            });
+        } else {
+            localStorage.setItem("theme", next);
+        }
+    })
+    .catch(() => {
+        localStorage.setItem("theme", next);
+    });
+});
+</script>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

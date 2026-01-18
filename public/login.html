@@ -1,0 +1,915 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   ROOT VARIABLES
+========================================================= */
+:root {
+  --bg-dark: #0b0b0d;
+  --bg-glass: rgba(15,15,20,0.65);
+  --border-soft: rgba(255,255,255,0.08);
+
+  --gold: #f4e6c1;
+  --blue-main: #008cff;
+  --blue-glow: rgba(0,140,255,0.45);
+
+  --text-main: #ffffff;
+  --radius: 18px;
+  --blur: blur(12px);
+  --transition: 0.3s ease;
+}
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 70px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur);
+  border-bottom: 1px solid var(--border-soft);
+  z-index: 2000;
+}
+
+nav .title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.6px;
+}
+
+/* =========================================================
+   MENU
+========================================================= */
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 18px;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+nav ul li:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+.profile {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+
+  background: linear-gradient(135deg, #008cff, #00aaff);
+  font-weight: 700;
+  cursor: pointer;
+
+  border: 2px solid rgba(255,255,255,0.25);
+  box-shadow: 0 0 20px var(--blue-glow);
+  animation: pulse 2s infinite ease-in-out;
+  transition: transform var(--transition);
+}
+
+.profile:hover {
+  transform: scale(1.08);
+}
+
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 18px rgba(0,140,255,0.4); }
+  50% { box-shadow: 0 0 30px rgba(0,140,255,0.7); }
+}
+
+/* =========================================================
+   HAMBURGER
+========================================================= */
+.hamburger {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 22px;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 3000;
+}
+
+.hamburger span {
+  height: 3px;
+  width: 100%;
+  background: var(--gold);
+  border-radius: 4px;
+  transition: 0.4s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px,5px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px,-5px);
+}
+
+/* =========================================================
+   RESPONSIVE MENU
+========================================================= */
+@media (max-width: 980px) {
+  .hamburger { display: flex; }
+
+  nav ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(8,8,12,0.97);
+    padding: 26px 0;
+    gap: 16px;
+
+    clip-path: circle(0% at 95% 0%);
+    transition: clip-path 0.6s ease-in-out;
+  }
+
+  nav ul.show {
+    clip-path: circle(160% at 95% 0%);
+  }
+}
+
+/* =========================================================
+   SPACER
+========================================================= */
+.spacer {
+  height: 85px;
+}
+
+/* =========================================================
+   FLOATING LETTERS BACKGROUND
+========================================================= */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.letter {
+  position: absolute;
+  font-size: 4rem;
+  font-weight: 800;
+  color: rgba(255,215,0,0.1);
+  animation: float 12s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(120vh) rotate(0deg); }
+  to   { transform: translateY(-20vh) rotate(360deg); }
+}
+
+/* =========================================================
+   GLASS BOX
+========================================================= */
+.glow-box {
+  width: 90%;
+  max-width: 520px;
+  margin: 120px auto;
+  padding: 40px;
+
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-soft);
+  backdrop-filter: blur(8px);
+
+  box-shadow: 0 0 30px rgba(96,180,255,0.25);
+}
+
+/* =========================================================
+   FORMS
+========================================================= */
+.box {
+  width: 380px;
+  margin: 120px auto 0;
+  padding: 32px;
+  text-align: center;
+
+  background: rgba(255,255,255,0.06);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px);
+
+  box-shadow: 0 0 24px rgba(0,140,255,0.3);
+}
+
+h2 {
+  color: #ffdf8a;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 15px;
+}
+
+input:focus {
+  background: rgba(255,255,255,0.2);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--blue-main);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+button:hover {
+  background: #00aaff;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   FADE IN
+========================================================= */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.8s ease;
+}
+
+.fade-in-up.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================= SWITCH → LEGENDARY BUTTON ================= */
+.switch {
+  margin-top: 16px;
+  width: 100%;
+  padding: 14px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+
+  color: #fff;
+  background: linear-gradient(135deg, #008cff, #00c6ff);
+
+  box-shadow:
+    0 0 18px rgba(0,140,255,0.45),
+    inset 0 0 10px rgba(255,255,255,0.25);
+
+  position: relative;
+  overflow: hidden;
+  transition: 0.35s ease;
+}
+
+/* لمعان متحرك */
+.switch {
+  margin-top: 12px;
+  width: 100%;
+  padding:8px 10px;   /* كان 14px 16px */
+
+  font-size: 0.9rem;   /* أصغر */
+  font-weight: 700;    /* أخف شوي */
+
+  border-radius: 12px; /* أنعم */
+}
+.switch::before {
+  content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+  transform: translateX(-120%);
+  transition: 0.6s ease;
+}
+
+/* Hover */
+.switch:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 0 34px rgba(0,180,255,0.75),
+    inset 0 0 14px rgba(255,255,255,0.35);
+}
+
+.switch:hover::before {
+  transform: translateX(120%);
+}
+
+/* Click */
+.switch:active {
+  transform: scale(0.96);
+  box-shadow:
+    0 0 14px rgba(0,140,255,0.45);
+}
+
+/* =========================================================
+   LAMP
+========================================================= */
+.lamp-wrapper {
+  position: fixed;
+  left: 26px;
+  top: 0;
+  z-index: 5000;
+  pointer-events: none;
+}
+
+.lamp-cord {
+  width: 3px;
+  height: 130px;
+  background: linear-gradient(#444, #111);
+  margin: auto;
+}
+
+.lamp-head {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  box-shadow: inset 0 0 8px #000, 0 0 12px #000;
+  pointer-events: auto;
+  transition: 0.3s ease;
+}
+
+.lamp-head:hover {
+  transform: scale(1.08);
+}
+
+/* =========================================================
+   LIGHT THEME
+========================================================= */
+:root[data-theme="light"] {
+  --bg-dark: #f4f7fb;
+  --bg-glass: rgba(255,255,255,0.8);
+  --text-main: #2c3e50;
+  --gold: #2563eb;
+}
+
+
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js" defer></script>
+</head>
+<body>
+
+    <!-- Lamp Toggle -->
+<div class="lamp-wrapper">
+  <div class="lamp-cord"></div>
+  <div class="lamp-head"></div>
+</div>
+
+<!-- ذيل النيون -->
+<div id="trail-container"></div>
+
+<nav>
+    <div class="title">Electron Vision</div>
+        <span class="verified-badge">✓</span>
+
+    <!-- زر همبرغر -->
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- بروفايل -->
+    <div id="profile" class="profile" style="display:none;"></div>
+</nav>
+
+<!-- زر تغيير اللغة -->
+<button id="lang-toggle" class="lang-toggle-btn" onclick="toggleLanguage()">EN</button>
+
+<div class="spacer"></div>
+
+<!-- الخلفية -->
+<div class="bg" id="bg"></div>
+
+<script>
+const lamp = document.querySelector(".lamp-head");
+const cord = document.querySelector(".lamp-cord");
+const root = document.documentElement;
+
+let pulling = false;
+let startY = 0;
+
+/* تحميل الثيم المحفوظ */
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  root.setAttribute("data-theme", savedTheme);
+}
+
+lamp.addEventListener("mousedown", e => {
+  pulling = true;
+  startY = e.clientY;
+  lamp.style.cursor = "grabbing";
+});
+
+window.addEventListener("mousemove", e => {
+  if (!pulling) return;
+
+  let distance = e.clientY - startY;
+  if (distance < 0) distance = 0;
+  if (distance > 120) distance = 120;
+
+  lamp.style.transform = `translateY(${distance}px)`;
+  cord.style.height = 130 + distance + "px";
+});
+
+window.addEventListener("mouseup", () => {
+  if (!pulling) return;
+  pulling = false;
+
+  lamp.style.transform = "translateY(0)";
+  cord.style.height = "130px";
+  lamp.style.cursor = "grab";
+
+  /* تبديل الثيم */
+  const current = root.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  root.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+});
+</script>
+
+<nav>
+      <!-- همبرغر -->
+  <div class="hamburger" id="burger" style="position:fixed; top:18px; right:20px; z-index:3000;">
+      <span></span>
+      <span></span>
+      <span></span>
+  </div>
+  <div class="title">ElectronVisionn</div>
+
+  <!-- القائمة -->
+  <ul class="menu" id="navMenu">
+      <li onclick="window.location.href='index.html'" data-key="nav_home">الرئيسية</li>
+      <li onclick="window.location.href='contact.html'" data-key="nav_contact">تواصل</li>
+  </ul>
+</nav>
+
+<!-- تسجيل الدخول -->
+<div class="glow-box fade-in-up" id="loginBox">
+    <h2 data-key="login_title">تسجيل الدخول</h2>
+    <input id="loginEmail" type="email" data-key="email" placeholder="الإيميل">
+    <input id="loginPass" type="password" data-key="password" placeholder="الرمز السري">
+    <button onclick="login()" data-key="login">دخول</button>
+    <div class="switch" onclick="switchToRegister()" data-key="login_switch_register">ليس لديك حساب؟ إنشاء حساب</div>
+</div>
+
+<!-- إنشاء حساب -->
+<div class="box" id="registerBox" style="display:none;">
+    <h2 data-key="register_title">إنشاء حساب</h2>
+    <input id="regEmail" type="email" data-key="email" placeholder="الإيميل">
+    <input id="regPass" type="password" data-key="password" placeholder="الرمز السري">
+    <button onclick="sendCode()" data-key="register_send_code">إرسال رمز التحقق</button>
+    <div class="switch" onclick="switchToLogin()" data-key="login_switch_login">لديك حساب؟ تسجيل دخول</div>
+</div>
+
+<!-- رمز التحقق -->
+<div class="box" id="verifyBox" style="display:none;">
+    <h2>أدخل رمز التحقق</h2>
+    <input id="codeInput" type="text" placeholder="الكود">
+    <button onclick="verify()">تأكيد</button>
+</div>
+
+<script>
+function switchToRegister() {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("registerBox").style.display = "block";
+}
+
+function switchToLogin() {
+    document.getElementById("registerBox").style.display = "none";
+    document.getElementById("verifyBox").style.display = "none";
+    document.getElementById("loginBox").style.display = "block";
+}
+
+// توليد كود تحقق عشوائي (لم يعد مستخدماً - السيرفر يولد الكود)
+function generateCode() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+function sendCode() {
+    const email = document.getElementById("regEmail").value.trim();
+    const pass = document.getElementById("regPass").value;
+
+    if (!email || !pass) {
+        alert("يرجى تعبئة جميع الحقول");
+        return;
+    }
+
+    // إظهار رسالة التحميل
+    const button = document.querySelector("#registerBox button");
+    const originalText = button.textContent;
+    button.textContent = "جاري الإرسال...";
+    button.disabled = true;
+
+    fetch("/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, pass })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            // تخزين الإيميل مؤقتاً
+            localStorage.setItem("temp_email", email);
+            document.getElementById("registerBox").style.display = "none";
+            document.getElementById("verifyBox").style.display = "block";
+            alert("تم إرسال رمز التحقق إلى بريدك الإلكتروني");
+        } else {
+            alert("فشل في إرسال الرمز. تحقق من البريد الإلكتروني أو حاول مرة أخرى");
+        }
+    })
+    .catch(err => {
+        console.error("خطأ:", err);
+        alert("حدث خطأ في الاتصال بالسيرفر");
+    })
+    .finally(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+    });
+}
+
+function verify() {
+    const code = document.getElementById("codeInput").value.trim();
+    const email = localStorage.getItem("temp_email");
+
+    if (!code || !email) {
+        alert("يرجى إدخال رمز التحقق");
+        return;
+    }
+
+    // إظهار رسالة التحميل
+    const button = document.querySelector("#verifyBox button");
+    const originalText = button.textContent;
+    button.textContent = "جاري التحقق...";
+    button.disabled = true;
+
+    fetch("/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // مهم لإرسال الـ cookies
+        body: JSON.stringify({ email, code })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            // تنظيف البيانات المؤقتة
+            localStorage.removeItem("temp_email");
+
+            // التحقق من وجود redirect
+            const redirectUrl = localStorage.getItem("redirectAfterLogin");
+            if (redirectUrl) {
+                localStorage.removeItem("redirectAfterLogin");
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = "index.html";
+            }
+        } else {
+            alert(data.error || "رمز التحقق غير صحيح");
+        }
+    })
+    .catch(err => {
+        console.error("خطأ:", err);
+        alert("حدث خطأ في الاتصال بالسيرفر");
+    })
+    .finally(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+    });
+}
+
+
+
+function login() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const pass = document.getElementById("loginPass").value;
+
+    if (!email || !pass) {
+        alert("يرجى تعبئة جميع الحقول");
+        return;
+    }
+
+    // إظهار رسالة التحميل
+    const button = document.querySelector("#loginBox button");
+    const originalText = button.textContent;
+    button.textContent = "جاري تسجيل الدخول...";
+    button.disabled = true;
+
+    fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // مهم لإرسال الـ cookies
+        body: JSON.stringify({ email, pass })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            // التحقق من وجود redirect
+            const redirectUrl = localStorage.getItem("redirectAfterLogin");
+            if (redirectUrl) {
+                localStorage.removeItem("redirectAfterLogin");
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = "index.html";
+            }
+        } else {
+            alert(data.error || "بيانات الدخول غير صحيحة");
+        }
+    })
+    .catch(err => {
+        console.error("خطأ:", err);
+        alert("حدث خطأ في الاتصال بالسيرفر");
+    })
+    .finally(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+    });
+}
+
+// قائمة الموبايل
+const burger = document.getElementById("burger");
+const navMenu = document.getElementById("navMenu");
+
+if (burger && navMenu) {
+    burger.addEventListener("click", () => {
+        navMenu.classList.toggle("show");
+        burger.classList.toggle("active");
+    });
+}
+
+/* أحرف الخلفية */
+const letters = ["E","L","C","T","R","O","N","V"];
+const bg = document.getElementById("bg");
+for (let i = 0; i < 30; i++) {
+    let s = document.createElement("span");
+    s.className = "letter";
+    s.innerText = letters[Math.floor(Math.random()*letters.length)];
+    s.style.left = Math.random()*100 + "vw";
+    s.style.animationDuration = (7 + Math.random()*6) + "s";
+    bg.appendChild(s);
+}
+
+/* وظيفة الانتقال */
+function go(page) {
+    window.location.href = page;
+}
+
+/* ذيل النيون */
+const trailContainer = document.getElementById("trail-container");
+const navHeight = 80;
+
+window.addEventListener("mousemove", (e) => {
+    if (e.clientY < navHeight + 10) return;
+
+    let dot = document.createElement("div");
+    dot.className = "trail";
+    dot.style.left = e.clientX + "px";
+    dot.style.top = e.clientY + "px";
+    trailContainer.appendChild(dot);
+
+    setTimeout(() => { dot.remove(); }, 320);
+});
+
+/* التحقق من تسجيل الدخول عند تحميل الصفحة */
+window.addEventListener("DOMContentLoaded", () => {
+    checkAuthStatus();
+    initScrollAnimations();
+});
+
+async function checkAuthStatus() {
+    try {
+        const response = await fetch("/auth/status", {
+            credentials: "include"
+        });
+        const data = await response.json();
+
+        const loginBtn = document.getElementById("login-btn");
+        const profile = document.getElementById("profile");
+
+        if (data.loggedIn) {
+            // المستخدم مسجل دخول
+            loginBtn.style.display = "none";
+            profile.style.display = "flex";
+            profile.innerText = data.email.charAt(0).toUpperCase();
+            profile.title = data.email;
+            profile.classList.add("profile-appear");
+
+            // إضافة قائمة منسدلة للبروفايل
+            profile.onclick = showProfileMenu;
+        } else {
+            // المستخدم غير مسجل دخول
+            loginBtn.style.display = "block";
+            profile.style.display = "none";
+        }
+    } catch (error) {
+        console.error("خطأ في التحقق من حالة الدخول:", error);
+        // في حالة الخطأ، إظهار زر تسجيل الدخول
+        document.getElementById("login-btn").style.display = "block";
+        document.getElementById("profile").style.display = "none";
+    }
+}
+
+function showProfileMenu() {
+    // إنشاء قائمة منسدلة للبروفايل
+    let menu = document.getElementById("profile-menu");
+    if (menu) {
+        menu.remove();
+        return;
+    }
+
+    menu = document.createElement("div");
+    menu.id = "profile-menu";
+    menu.innerHTML = `
+        <div class="profile-menu-item" data-action="profile">البروفايل</div>
+        <div class="profile-menu-item" data-action="logout">تسجيل الخروج</div>
+    `;
+    menu.style.cssText = `
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: rgba(15,15,20,0.95);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 8px 0;
+        min-width: 150px;
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    `;
+
+    const menuItems = menu.querySelectorAll(".profile-menu-item");
+    menuItems.forEach(item => {
+        item.style.cssText = `
+            padding: 12px 16px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            transition: 0.2s;
+        `;
+        item.onmouseover = () => item.style.background = "rgba(255,255,255,0.1)";
+        item.onmouseout = () => item.style.background = "transparent";
+    });
+
+    document.body.appendChild(menu);
+
+    // إغلاق القائمة عند النقر خارجها
+    setTimeout(() => {
+        document.addEventListener("click", function closeMenu(e) {
+            if (!menu.contains(e.target) && e.target !== document.getElementById("profile")) {
+                menu.remove();
+                document.removeEventListener("click", closeMenu);
+            }
+        });
+    }, 10);
+}
+
+async function logout() {
+    try {
+        const response = await fetch("/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+        const data = await response.json();
+
+        if (data.ok) {
+            // إعادة توجيه للصفحة الرئيسية
+            window.location.href = "index.html";
+        } else {
+            alert("خطأ في تسجيل الخروج");
+        }
+    } catch (error) {
+        console.error("خطأ:", error);
+        alert("حدث خطأ في تسجيل الخروج");
+    }
+}
+
+/* أنيميشن العناصر عند النزول */
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, observerOptions);
+
+    // مراقبة العناصر التي تحتوي على كلاسات الأنيميشن
+    document.querySelectorAll('.fade-in-left, .fade-in-right, .fade-in-up').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+function toggleMenu() {
+    const nav = document.getElementById("nav-links");
+    const burger = document.querySelector(".hamburger");
+
+    nav.classList.toggle("show");
+    burger.classList.toggle("active");
+}
+document.querySelectorAll("#nav-links li").forEach(li => {
+    li.addEventListener("click", () => {
+        document.getElementById("nav-links").classList.remove("show");
+        document.querySelector(".hamburger").classList.remove("active");
+    });
+});
+
+/* إضافة event listeners للأزرار */
+document.addEventListener('DOMContentLoaded', function() {
+    // إضافة event listeners لعناصر القائمة
+    document.querySelectorAll('#nav-links li[data-page]').forEach(function(li) {
+        li.addEventListener('click', function() {
+            const page = this.getAttribute('data-page');
+            go(page);
+        });
+    });
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.querySelector(".hamburger");
+
+    if (!hamburger) return;
+
+    // إذا العرض أكبر من 992px نعتبره لابتوب / ديسكتوب
+    if (window.innerWidth >= 992) {
+        hamburger.remove();
+    }
+});
+res.send(`<html><body>${escapeHtml(page.content)}</body></html>`);
+
+</script>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Payment Cancelled</title>
+<link rel="stylesheet" href="responsive.css">
+<link rel="icon" href="/favicon.png">
+<style>
+    /* ----------------------------- */
+/* جعل الصفحة مرنة بدون كسر التصميم */
+/* ----------------------------- */
+
+/* ضبط الـViewport */
+html, body {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* الصور والفيديوهات */
+img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* الحاويات الرئيسية */
+.container, header, main, footer, section, article {
+    width: 100%;
+    max-width: 1200px; /* يحافظ على العرض الحالي للكبير */
+    margin: auto;
+}
+
+/* القوائم والأزرار */
+button, a {
+    min-width: 40px;
+    min-height: 40px;
+    word-wrap: break-word;
+}
+
+/* ----------- Media Queries للأجهزة الصغيرة ----------- */
+
+/* الهواتف */
+@media (max-width: 768px) {
+    .container, header, main, footer, section, article {
+        padding: 10px !important; /* يضيف مسافة بدون كسر التصميم */
+    }
+    
+    nav, .menu, ul {
+        display: block !important; /* القوائم تتحول عمود */
+    }
+    
+    button, a {
+        width: 100% !important; /* الأزرار تمتد لعرض الهاتف */
+    }
+}
+
+/* الأجهزة اللوحية */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 15px !important;
+    }
+}
+
+body { font-family:Poppins,sans-serif; background:#0b0b0d; color:#fff; text-align:center; padding:50px;}
+h1 { color:#f5d37a; }
+button { padding:12px 20px; margin-top:20px; border:none; border-radius:10px; background:#f5d37a; cursor:pointer; font-weight:bold;}
+button:hover { background:#ffe9b0; color:#000;}
+@media (max-width: 768px) {
+    .menu {
+        display: none; /* مخفية افتراضياً */
+        flex-direction: column;
+        width: 100%;
+        background: #0b0b0d; /* نفس لون الخلفية */
+        position: absolute;
+        top: 50px; /* تحت الزر */
+        left: 0;
+    }
+
+    .menu.show {
+        display: flex;
+    }
+}
+
+</style>
+</head>
+<body>
+<h1>❌ تم إلغاء الدفع</h1>
+<p>لم يتم خصم أي مبلغ، يمكنك المحاولة مرة أخرى.</p>
+<button onclick="window.location.href='store.html'">العودة للمتجر</button>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

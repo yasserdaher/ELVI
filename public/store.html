@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجر الاشتراكات</title>
+<link rel="icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background: #0b0b0d;
+    color: #fff;
+}
+
+/* شريط تنقل */nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(15, 15, 20, 0.65);
+    backdrop-filter: blur(8px);
+    padding: 15px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    z-index: 2000;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #d6b969;
+}
+
+/* ===== checkbox مخفي ===== */
+#menu-toggle {
+    display: none;
+}
+
+/* ===== زر همبرغر ===== */
+.hamburger {
+    width: 28px;
+    height: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.hamburger span {
+    height: 3px;
+    width: 100%;
+    background: #c9ab59;
+    border-radius: 4px;
+    transition: 0.4s ease;
+}
+
+/* X عند الفتح */
+#menu-toggle:checked + label span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+#menu-toggle:checked + label span:nth-child(2) {
+    opacity: 0;
+}
+#menu-toggle:checked + label span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ===== القائمة ===== */
+.nav-links {
+    position: fixed;
+    top: 64px;
+    right: 0;
+    width: 100%;
+    background:rgba(37, 99, 235, 0.12)
+;
+
+    backdrop-filter: blur(14px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 0;
+    list-style: none;
+    margin: 0;
+    clip-path: circle(0% at 95% 0%);
+    transition: clip-path 0.6s ease-in-out;
+    z-index: 900;
+}
+
+#menu-toggle:checked ~ .nav-links {
+    clip-path: circle(160% at 95% 0%);
+}
+/* ===============================
+   القائمة (Navigation Menu)
+================================ */
+
+/* الحاوية الرئيسية */
+.nav-links {
+    position: fixed;
+    top: 64px;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.18),
+        rgba(14, 165, 233, 0.15)
+    );
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+
+    padding: 28px 0;
+    list-style: none;
+    margin: 0;
+
+    clip-path: circle(0% at 95% 0%);
+    transition: 
+        clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.4s ease;
+
+    z-index: 900;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* فتح القائمة */
+#menu-toggle:checked ~ .nav-links {
+    clip-path: circle(160% at 95% 0%);
+}
+
+/* عناصر القائمة */
+.nav-links li {
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #d1fae5;
+    cursor: pointer;
+    transition: all 0.35s ease;
+}
+
+/* الروابط */
+.nav-links a {
+    color: inherit;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 14px;
+    display: block;
+    transition: all 0.35s ease;
+}
+
+/* Hover احترافي */
+.nav-links li:hover a {
+    background: linear-gradient(
+        135deg,
+        rgba(245, 211, 122, 0.35),
+        rgba(34, 197, 94, 0.35)
+    );
+    color: #020617;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.18),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+/* تأثير ضغط */
+.nav-links li:active a {
+    transform: scale(0.97);
+}
+
+/* ===============================
+   دعم القائمة داخل nav
+================================ */
+
+nav ul li {
+    cursor: pointer;
+    border-radius: 14px;
+}
+
+/* ===============================
+   مسافة أعلى الصفحة
+================================ */
+
+.spacer {
+    height: 90px;
+}
+
+/* ===============================
+   تحسين للأجهزة الكبيرة
+================================ */
+
+@media (min-width: 768px) {
+    .nav-links {
+        width: 380px;
+        right: 20px;
+        border-radius: 18px;
+    }
+}
+
+/* ===== المنتجات ===== */
+#storeProducts {
+    width: 90%;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.product {
+    background: #111118;
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+}
+
+.product img {
+    width: 100%;
+    height: 140px;
+    object-fit: contain;
+    background: #0f0f15;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.product h3 {
+    color: #ffe9b0;
+}
+
+.product .price {
+    color: #f5d37a;
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+.product button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #f5d37a;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ================= LIGHT THEME ================= */
+:root[data-theme="light"] {
+
+  /* الخلفيات */
+  --bg-main: #f4f7fb;              /* خلفية عامة فخمة */
+  --bg-nav: rgba(255,255,255,0.78);
+  --bg-card: rgba(255,255,255,0.65);
+  --bg-soft: #eef2f7;
+
+  /* النصوص */
+  --text-main: #4b73a5;
+  --text-muted: #5f6b7a;
+  --text-nav: #1c2430;
+
+  /* ألوان تقنية */
+  --blue-main: #2563eb;
+  --blue-soft: rgba(37,99,235,0.12);
+  --blue-glow: rgba(37,99,235,0.35);
+
+  /* حدود وظلال */
+  --border-light: rgba(15,23,42,0.08);
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
+  --shadow-strong: 0 20px 50px rgba(15,23,42,0.12);
+}
+
+/* ================= BODY ================= */
+:root[data-theme="light"] body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ================= NAV ================= */
+:root[data-theme="light"] nav {
+  background: var(--bg-nav);
+  border-bottom: 1px solid var(--border-light);
+  backdrop-filter: blur(14px);
+}
+
+:root[data-theme="light"] nav .title {
+  color: var(--text-main);
+}
+
+/* ================= NAV ITEMS ================= */
+:root[data-theme="light"] nav ul li {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] nav ul li:hover {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+/* ================= PROFILE ================= */
+:root[data-theme="light"] nav .profile {
+  background: var(--blue-main);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+}
+
+/* ================= HERO ================= */
+:root[data-theme="light"] .hero h1 {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .hero p {
+  color: var(--text-muted);
+}
+
+/* ================= GLOW BOX ================= */
+:root[data-theme="light"] .glow-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+/* ================= ITEMS ================= */
+:root[data-theme="light"] .item {
+  background: var(--bg-soft);
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .item:hover {
+  background: var(--blue-main);
+  color: #fff;
+}
+
+/* ================= LOGO ================= */
+:root[data-theme="light"] .logo-square {
+  border-color: var(--blue-main);
+  background: rgba(255,255,255,0.75);
+  box-shadow:
+    0 0 20px var(--blue-glow),
+    inset 0 0 8px rgba(255,255,255,0.6);
+}
+
+:root[data-theme="light"] .logo-square img {
+  filter: drop-shadow(0 0 6px var(--blue-glow));
+}
+
+/* ================= LETTER BG ================= */
+:root[data-theme="light"] .letter {
+  color: rgba(37,99,235,0.08);
+}
+
+/* ================= HAMBURGER ================= */
+:root[data-theme="light"] .hamburger span {
+  background: var(--text-main);
+}
+
+/* ================= LAMP ================= */
+
+.lamp-wrapper {
+  position: fixed;
+  left: 26px;
+  top: 0;
+  z-index: 5000;
+  user-select: none;
+    pointer-events: none;
+}
+
+.lamp-cord {
+  width: 3px;
+  height: 130px;
+  background: linear-gradient(#444, #111);
+  margin: auto;
+  transition: height 0.25s ease;
+}
+
+.lamp-head {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  cursor: grab;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,0.7),
+    0 0 12px rgba(0,0,0,0.6);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+      pointer-events: auto;
+
+}
+
+/* ===== لمبة شغالة (لايت مود) ===== */
+:root[data-theme="light"] .lamp-head {
+  background: #ffe08a;
+  box-shadow:
+    0 0 35px rgba(255,208,120,0.95),
+    0 0 80px rgba(255,208,120,0.45);
+}
+
+/* ===== Hover خفيف ===== */
+.lamp-head:hover {
+  transform: scale(1.05);
+}
+/* ===== STORE TITLE ===== */
+.store-title {
+  text-align: center;
+  margin: 40px auto 20px;
+}
+
+.store-title h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #e2bd60; /* دارك */
+}
+
+.store-title p {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: rgba(201, 128, 128, 0.65);
+}
+
+/* ===== LIGHT MODE ===== */
+:root[data-theme="light"] .store-title h1 {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .store-title p {
+  color: var(--text-muted);
+}
+
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js" defer></script>
+</head>
+
+<body>
+       <!-- Lamp Toggle -->
+<div class="lamp-wrapper">
+  <div class="lamp-cord"></div>
+  <div class="lamp-head"></div>
+</div>
+
+<nav>
+    <input type="checkbox" id="menu-toggle">
+
+    <label for="menu-toggle" class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <div class="title">ELECTRON VISION</div>
+
+    <!-- القائمة لازم تكون هون -->
+  <ul class="nav-links">
+    <li><a href="index.html">الرئيسية</a></li>
+    <li><a href="products.html">المنتجات</a></li>
+    <li><a href="store.html">المتجر</a></li>
+    <li><a href="contact.html">تواصل</a></li>
+</ul>
+
+</nav>
+
+<div class="spacer"></div>
+<section class="store-title">
+  <h1 data-key="store_title">متجر الاشتراك</h1>
+  <p data-key="store_subtitle">اختر الباقة المناسبة وابدأ فوراً</p>
+</section>
+
+<!-- 🔥 هذا كان مفقود -->
+<div id="storeProducts"></div>
+</script>
+
+<script>
+const lamp = document.querySelector(".lamp-head");
+const cord = document.querySelector(".lamp-cord");
+const root = document.documentElement;
+
+let pulling = false;
+let startY = 0;
+
+/* تحميل الثيم المحفوظ */
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  root.setAttribute("data-theme", savedTheme);
+}
+
+lamp.addEventListener("mousedown", e => {
+  pulling = true;
+  startY = e.clientY;
+  lamp.style.cursor = "grabbing";
+});
+
+window.addEventListener("mousemove", e => {
+  if (!pulling) return;
+
+  let distance = e.clientY - startY;
+  if (distance < 0) distance = 0;
+  if (distance > 120) distance = 120;
+
+  lamp.style.transform = `translateY(${distance}px)`;
+  cord.style.height = 130 + distance + "px";
+});
+
+window.addEventListener("mouseup", () => {
+  if (!pulling) return;
+  pulling = false;
+
+  lamp.style.transform = "translateY(0)";
+  cord.style.height = "130px";
+  lamp.style.cursor = "grab";
+
+  /* تبديل الثيم */
+  const current = root.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  root.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+});
+</script>
+
+<script>
+// التحقق من تسجيل الدخول عند تحميل الصفحة
+async function checkAuth() {
+    try {
+        const res = await fetch('/auth/status', { credentials: 'include' });
+        const data = await res.json();
+        if (!data.loggedIn) {
+            // حفظ الصفحة الحالية للعودة إليها بعد تسجيل الدخول
+            await fetch("/set-redirect", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ redirect: window.location.href })
+            });
+            window.location.href = "login.html";
+        }
+    } catch (err) {
+        console.error("خطأ في التحقق من التوثيق:", err);
+    }
+}
+
+async function loadStoreProducts() {
+    try {
+        const res = await fetch('/api/products', { credentials: 'include' });
+        if (!res.ok) throw new Error(res.status);
+
+        const products = await res.json();
+        const container = document.getElementById('storeProducts');
+        container.innerHTML = '';
+
+        products
+        .filter(p => p.type === 'paid')
+        .forEach(p => {
+            const price = Number(p.price) || 0;
+            container.innerHTML += `
+                <div class="product">
+                    <h3>${p.name}</h3>
+                    <p>${p.description || ''}</p>
+                    <div class="price">$${price}</div>
+                    <button onclick="buy('${p.name}', ${price})">اشترك الآن</button>
+                </div>
+            `;
+        });
+
+    } catch (e) {
+        console.error(e);
+        alert("حدث خطأ أثناء جلب المنتجات");
+    }
+}
+
+async function buy(product, price) {
+    const res = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ product, price })
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    checkAuth();
+    loadStoreProducts();
+});
+</script>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

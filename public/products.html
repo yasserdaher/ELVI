@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-key="products_title">Free Store - ELECTRON VISION</title>
+<link rel="icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:'Cairo', sans-serif;
+    background:#0b0b0d;
+    color:#fff;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ================= NAV ================= */
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    height:64px;
+    padding:0 24px;
+    background:rgba(15,15,20,0.9);
+    backdrop-filter:blur(8px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    z-index:1000;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.title{
+    font-size:1.45rem;
+    font-weight:700;
+    color:#f4e6c1;
+}
+
+/* ===== checkbox ===== */
+#menu-toggle{
+    display:none;
+}
+
+/* ===== hamburger ===== */
+.hamburger{
+    width:28px;
+    height:22px;
+    display:none;
+    flex-direction:column;
+    justify-content:space-between;
+    cursor:pointer;
+}
+
+.hamburger span{
+    height:3px;
+    width:100%;
+    background:#f4e6c1;
+    border-radius:4px;
+    transition:0.4s ease;
+}
+
+/* animation X */
+#menu-toggle:checked + label span:nth-child(1){
+    transform:rotate(45deg) translate(5px,5px);
+}
+#menu-toggle:checked + label span:nth-child(2){
+    opacity:0;
+}
+#menu-toggle:checked + label span:nth-child(3){
+    transform:rotate(-45deg) translate(5px,-5px);
+}
+
+/* ===== MENU DESKTOP ===== */
+ul.menu{
+    list-style:none;
+    display:flex;
+    gap:18px;
+    margin:0;
+    padding:0;
+}
+
+ul.menu li{
+    cursor:pointer;
+    padding:6px 12px;
+    border-radius:8px;
+    transition:0.25s;
+}
+
+ul.menu li:hover{
+    background:rgba(255,255,255,0.12);
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+
+    .hamburger{
+        display:flex;
+    }
+
+    ul.menu{
+        position:fixed;
+        top:64px;
+        right:0;
+        width:100%;
+        flex-direction:column;
+        align-items:center;
+        background:#0b0b0d;
+        padding:24px 0;
+        gap:14px;
+
+        clip-path:circle(0% at 95% 0%);
+        transition:clip-path 0.6s ease-in-out;
+        z-index:900;
+    }
+
+    #menu-toggle:checked ~ ul.menu{
+        clip-path:circle(160% at 95% 0%);
+    }
+
+    ul.menu li{
+        width:100%;
+        text-align:center;
+        padding:12px;
+        font-size:1.05rem;
+    }
+}
+
+/* ================= CONTENT ================= */
+.spacer{
+    height:90px;
+}
+
+.products{
+    width:90%;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:24px;
+}
+
+.card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:18px;
+    padding:20px;
+    backdrop-filter:blur(4px);
+    box-shadow:0 0 22px rgba(96,180,255,0.18);
+    transition:0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 28px rgba(96,180,255,0.32);
+}
+
+.card h3{
+    color:#ffe9b0;
+    margin-top:0;
+}
+
+.card p{
+    opacity:0.85;
+    font-size:0.95rem;
+}
+
+button.action{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#f5d37a,#cfae50);
+    font-weight:700;
+    cursor:pointer;
+}
+
+button.action:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+}
+
+/* ================= LIGHT THEME ================= */
+:root[data-theme="light"] {
+
+  /* الخلفيات */
+  --bg-main: #f4f7fb;              /* خلفية عامة فخمة */
+  --bg-nav: rgba(255,255,255,0.78);
+  --bg-card: rgba(255,255,255,0.65);
+  --bg-soft: #eef2f7;
+
+  /* النصوص */
+  --text-main: #4b73a5;
+  --text-muted: #5f6b7a;
+  --text-nav: #1c2430;
+
+  /* ألوان تقنية */
+  --blue-main: #2563eb;
+  --blue-soft: rgba(37,99,235,0.12);
+  --blue-glow: rgba(37,99,235,0.35);
+
+  /* حدود وظلال */
+  --border-light: rgba(15,23,42,0.08);
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
+  --shadow-strong: 0 20px 50px rgba(15,23,42,0.12);
+}
+
+/* ================= BODY ================= */
+:root[data-theme="light"] body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ================= NAV ================= */
+:root[data-theme="light"] nav {
+  background: var(--bg-nav);
+  border-bottom: 1px solid var(--border-light);
+  backdrop-filter: blur(14px);
+}
+
+:root[data-theme="light"] nav .title {
+  color: var(--text-main);
+}
+
+/* ================= NAV ITEMS ================= */
+:root[data-theme="light"] nav ul li {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] nav ul li:hover {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+/* ================= PROFILE ================= */
+:root[data-theme="light"] nav .profile {
+  background: var(--blue-main);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+}
+
+/* ================= HERO ================= */
+:root[data-theme="light"] .hero h1 {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .hero p {
+  color: var(--text-muted);
+}
+
+/* ================= GLOW BOX ================= */
+:root[data-theme="light"] .glow-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+/* ================= ITEMS ================= */
+:root[data-theme="light"] .item {
+  background: var(--bg-soft);
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .item:hover {
+  background: var(--blue-main);
+  color: #fff;
+}
+
+/* ================= LOGO ================= */
+:root[data-theme="light"] .logo-square {
+  border-color: var(--blue-main);
+  background: rgba(255,255,255,0.75);
+  box-shadow:
+    0 0 20px var(--blue-glow),
+    inset 0 0 8px rgba(255,255,255,0.6);
+}
+
+:root[data-theme="light"] .logo-square img {
+  filter: drop-shadow(0 0 6px var(--blue-glow));
+}
+
+/* ================= LETTER BG ================= */
+:root[data-theme="light"] .letter {
+  color: rgba(37,99,235,0.08);
+}
+
+/* ================= HAMBURGER ================= */
+:root[data-theme="light"] .hamburger span {
+  background: var(--text-main);
+}
+
+/* ================= LAMP ================= */
+
+.lamp-wrapper {
+  position: fixed;
+  left: 26px;
+  top: 0;
+  z-index: 5000;
+  user-select: none;
+    pointer-events: none;
+}
+
+.lamp-cord {
+  width: 3px;
+  height: 130px;
+  background: linear-gradient(#444, #111);
+  margin: auto;
+  transition: height 0.25s ease;
+}
+
+.lamp-head {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  cursor: grab;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,0.7),
+    0 0 12px rgba(0,0,0,0.6);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+      pointer-events: auto;
+
+}
+
+/* ===== لمبة شغالة (لايت مود) ===== */
+:root[data-theme="light"] .lamp-head {
+  background: #ffe08a;
+  box-shadow:
+    0 0 35px rgba(255,208,120,0.95),
+    0 0 80px rgba(255,208,120,0.45);
+}
+
+/* ===== Hover خفيف ===== */
+.lamp-head:hover {
+  transform: scale(1.05);
+}
+
+/* Animation للعناصر عند النزول */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-on-scroll.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-left {
+    animation: fadeInLeft 0.8s ease-out forwards;
+}
+
+.scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+.delay-4 { animation-delay: 0.8s; }
+
+</style>
+</head>
+
+<body>
+   <!-- Lamp Toggle -->
+<div class="lamp-wrapper">
+  <div class="lamp-cord"></div>
+  <div class="lamp-head"></div>
+</div>
+<script>
+const lamp = document.querySelector(".lamp-head");
+const cord = document.querySelector(".lamp-cord");
+const root = document.documentElement;
+
+let pulling = false;
+let startY = 0;
+
+/* تحميل الثيم المحفوظ */
+async function loadTheme() {
+    try {
+        const authRes = await fetch("/auth/status", { credentials: "include" });
+        const auth = await authRes.json();
+        if (auth.loggedIn) {
+            const themeRes = await fetch("/api/user-theme", { credentials: "include" });
+            const themeData = await themeRes.json();
+            root.setAttribute("data-theme", themeData.theme);
+        } else {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                root.setAttribute("data-theme", savedTheme);
+            }
+        }
+    } catch (e) {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            root.setAttribute("data-theme", savedTheme);
+        }
+    }
+}
+loadTheme();
+
+lamp.addEventListener("mousedown", e => {
+  pulling = true;
+  startY = e.clientY;
+  lamp.style.cursor = "grabbing";
+});
+
+window.addEventListener("mousemove", e => {
+  if (!pulling) return;
+
+  let distance = e.clientY - startY;
+  if (distance < 0) distance = 0;
+  if (distance > 120) distance = 120;
+
+  lamp.style.transform = `translateY(${distance}px)`;
+  cord.style.height = 130 + distance + "px";
+});
+
+window.addEventListener("mouseup", () => {
+  if (!pulling) return;
+  pulling = false;
+
+  lamp.style.transform = "translateY(0)";
+  cord.style.height = "130px";
+  lamp.style.cursor = "grab";
+
+  /* تبديل الثيم */
+  const current = root.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  root.setAttribute("data-theme", next);
+  
+  // حفظ الثيم
+  fetch("/auth/status", { credentials: "include" })
+    .then(res => res.json())
+    .then(auth => {
+        if (auth.loggedIn) {
+            fetch("/api/user-theme", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ theme: next })
+            });
+        } else {
+            localStorage.setItem("theme", next);
+        }
+    })
+    .catch(() => {
+        localStorage.setItem("theme", next);
+    });
+});
+</script>
+
+<nav>
+    <div class="title">ELECTRON VISION</div>
+
+    <input type="checkbox" id="menu-toggle">
+    <label for="menu-toggle" class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <ul class="menu">
+        <li onclick="location.href='index.html'" data-key="nav_home">الرئيسية</li>
+        <li onclick="location.href='store.html'" data-key="nav_store">المتجر</li>
+    </ul>
+</nav>
+
+<div class="spacer"></div>
+
+<div class="products" 
+id="productsList"></div>
+
+<script>
+async function loadProducts(){
+    try{
+        const res = await fetch('/api/products', { credentials:'include' });
+        const data = await res.json();
+
+        let products = Array.isArray(data) ? data : [];
+
+        const container = document.getElementById('productsList');
+
+        container.innerHTML = products
+            .filter(p => p.type === 'free')
+            .map((p, index)=>`
+                <div class="card animate-on-scroll delay-${(index % 4) + 1}">
+                    <h3>${p.name}</h3>
+                    <p>${p.description || 'لا يوجد وصف'}</p>
+                    <button class="action">تحميل</button>
+                </div>
+            `).join('');
+
+        /* 🔥 شغّل الأنيميشن بعد ما تنضاف العناصر */
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document
+            .querySelectorAll('.animate-on-scroll')
+            .forEach(el => observer.observe(el));
+
+    }catch(e){
+        console.error('خطأ أثناء جلب المنتجات:', e);
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', loadProducts);
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
+
+    // مراقبة العناصر للـ Animation
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, observerOptions);
+
+    const animateElements = document.querySelectorAll('.animate-on-scroll');
+    animateElements.forEach(el => observer.observe(el));
+});
+window.addEventListener("unhandledrejection", event => {
+    if (event.reason && event.reason.code === 403) {
+        event.preventDefault();
+    }
+});
+
+// Navigation event listeners
+document.querySelectorAll('[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const page = btn.getAttribute('data-page');
+        window.location.href = page;
+    });
+});
+
+</script>
+
+<!-- Footer -->
+<footer style="
+    background: rgba(15, 15, 20, 0.8);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 0;
+    margin-top: auto;
+    text-align: center;
+">
+    <p style="color: #888; font-size: 0.9rem; margin: 0;">
+        &copy; 2025 Electron Vision. جميع الحقوق محفوظة.
+    </p>
+</footer>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

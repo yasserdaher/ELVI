@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دعم طوارئ - شركتنا</title>
+<link rel="icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="responsive.css">
+<style>
+body { margin:0; font-family:'Cairo',sans-serif; background: linear-gradient(135deg,#1c1c2e,#2a2a3d); color:#fff; }
+.container { max-width:520px; margin:100px auto; background:rgba(255,255,255,0.05); padding:35px; border-radius:25px; box-shadow:0 10px 40px rgba(0,0,0,0.6); backdrop-filter: blur(10px); transition: transform 0.3s ease; }
+.container:hover { transform: translateY(-5px); }
+h1 { text-align:center; color:#ffb3b3; font-size:2rem; margin-bottom:10px; }
+p { text-align:center; opacity:0.85; margin-bottom:30px; font-size:1rem; }
+input, textarea { width:100%; background:rgba(255,255,255,0.1); border:none; border-radius:15px; padding:14px; color:#fff; margin-bottom:16px; resize:none; transition: background 0.3s ease; }
+input:focus, textarea:focus { background: rgba(255,255,255,0.18); outline:none; }
+button { width:100%; padding:14px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; background: linear-gradient(135deg,#ff7b7b,#ff4b4b); box-shadow:0 5px 15px rgba(255,75,75,0.4); transition: all 0.3s ease; margin-bottom:10px; }
+button:hover { transform: translateY(-3px); box-shadow:0 8px 20px rgba(255,75,75,0.6); }
+
+/* شريط التنقل */
+nav { max-width:520px; margin:0 auto 30px; padding:20px 0; display:flex; justify-content:space-between; align-items:center; }
+nav .title { font-size:20px; font-weight:bold; text-align:center; color:#ff9f9f; }
+nav ul { list-style:none; padding:0; display:flex; gap:12px; }
+nav ul li { padding:12px; background:rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; text-align:center; transition:0.3s; flex:1; }
+nav ul li:hover { background:rgba(255,255,255,0.15); transform: translateY(-2px); }
+/* إخفاء checkbox */
+#menu-toggle{
+    display:none;
+}
+
+/* زر همبرغر */
+.hamburger{
+    width:28px;
+    height:22px;
+    display:none;
+    flex-direction:column;
+    justify-content:space-between;
+    cursor:pointer;
+}
+
+.hamburger span{
+    height:3px;
+    width:100%;
+    background:#f4e6c1;
+    border-radius:4px;
+    transition:0.4s ease;
+}
+
+/* تحول إلى X */
+#menu-toggle:checked + .hamburger span:nth-child(1){
+    transform:rotate(45deg) translate(5px,5px);
+}
+#menu-toggle:checked + .hamburger span:nth-child(2){
+    opacity:0;
+}
+#menu-toggle:checked + .hamburger span:nth-child(3){
+    transform:rotate(-45deg) translate(5px,-5px);
+}
+
+/* متجاوب */@media(max-width:768px){
+
+    .hamburger{
+        display:flex;
+    }
+
+    ul.menu{
+        position:fixed;
+        top:64px;
+        right:0;
+        width:100%;
+        flex-direction:column;
+        align-items:center;
+        background:#0b0b0d;
+        padding:24px 0;
+        gap:14px;
+
+        clip-path:circle(0% at 95% 0%);
+        transition:clip-path 0.6s ease-in-out;
+    }
+
+    #menu-toggle:checked ~ ul.menu{
+        clip-path:circle(160% at 95% 0%);
+    }
+}
+
+/* ================= LIGHT THEME ================= */
+:root[data-theme="light"] {
+
+  /* الخلفيات */
+  --bg-main: #f4f7fb;              /* خلفية عامة فخمة */
+  --bg-nav: rgba(255,255,255,0.78);
+  --bg-card: rgba(255,255,255,0.65);
+  --bg-soft: #eef2f7;
+
+  /* النصوص */
+  --text-main: #4b73a5;
+  --text-muted: #5f6b7a;
+  --text-nav: #1c2430;
+
+  /* ألوان تقنية */
+  --blue-main: #2563eb;
+  --blue-soft: rgba(37,99,235,0.12);
+  --blue-glow: rgba(37,99,235,0.35);
+
+  /* حدود وظلال */
+  --border-light: rgba(15,23,42,0.08);
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
+  --shadow-strong: 0 20px 50px rgba(15,23,42,0.12);
+}
+
+/* ================= BODY ================= */
+:root[data-theme="light"] body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ================= NAV ================= */
+:root[data-theme="light"] nav {
+  background: var(--bg-nav);
+  border-bottom: 1px solid var(--border-light);
+  backdrop-filter: blur(14px);
+}
+
+:root[data-theme="light"] nav .title {
+  color: var(--text-main);
+}
+
+/* ================= NAV ITEMS ================= */
+:root[data-theme="light"] nav ul li {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] nav ul li:hover {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+/* ================= PROFILE ================= */
+:root[data-theme="light"] nav .profile {
+  background: var(--blue-main);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+}
+
+/* ================= HERO ================= */
+:root[data-theme="light"] .hero h1 {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .hero p {
+  color: var(--text-muted);
+}
+
+/* ================= GLOW BOX ================= */
+:root[data-theme="light"] .glow-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+/* ================= ITEMS ================= */
+:root[data-theme="light"] .item {
+  background: var(--bg-soft);
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .item:hover {
+  background: var(--blue-main);
+  color: #fff;
+}
+
+/* ================= LOGO ================= */
+:root[data-theme="light"] .logo-square {
+  border-color: var(--blue-main);
+  background: rgba(255,255,255,0.75);
+  box-shadow:
+    0 0 20px var(--blue-glow),
+    inset 0 0 8px rgba(255,255,255,0.6);
+}
+
+:root[data-theme="light"] .logo-square img {
+  filter: drop-shadow(0 0 6px var(--blue-glow));
+}
+
+/* ================= LETTER BG ================= */
+:root[data-theme="light"] .letter {
+  color: rgba(37,99,235,0.08);
+}
+
+/* ================= HAMBURGER ================= */
+:root[data-theme="light"] .hamburger span {
+  background: var(--text-main);
+}
+
+/* ================= LAMP ================= */
+
+.lamp-wrapper {
+  position: fixed;
+  left: 26px;
+  top: 0;
+  z-index: 5000;
+  user-select: none;
+    pointer-events: none;
+}
+
+.lamp-cord {
+  width: 3px;
+  height: 130px;
+  background: linear-gradient(#444, #111);
+  margin: auto;
+  transition: height 0.25s ease;
+}
+
+.lamp-head {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  cursor: grab;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,0.7),
+    0 0 12px rgba(0,0,0,0.6);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+      pointer-events: auto;
+
+}
+
+/* ===== لمبة شغالة (لايت مود) ===== */
+:root[data-theme="light"] .lamp-head {
+  background: #ffe08a;
+  box-shadow:
+    0 0 35px rgba(255,208,120,0.95),
+    0 0 80px rgba(255,208,120,0.45);
+}
+
+/* ===== Hover خفيف ===== */
+.lamp-head:hover {
+  transform: scale(1.05);
+}
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js" defer></script>
+
+</head>
+<body>
+<nav>
+  <div class="title">Electron Vision</div>
+     <!-- Lamp Toggle -->
+<div class="lamp-wrapper">
+  <div class="lamp-cord"></div>
+  <div class="lamp-head"></div>
+</div>
+
+
+  <!-- همبرغر -->
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+  </label>
+
+  <ul class="menu">
+      <li onclick="window.location.href='index.html'">الصفحة الرئيسية</li>
+  </ul>
+</nav>
+
+
+<div class="container">
+<h1 data-key="support_title">🚨 دعم طوارئ</h1>
+<p data-key="support_subtitle">نرد خلال دقائق</p>
+
+<input id="user" data-key="support_form_name" placeholder="اسمك">
+<input id="issue" data-key="support_form_email" placeholder="الإيميل أو رقم الهاتف">
+<textarea id="details" data-key="support_form_message" rows="5" placeholder="اشرح المشكلة"></textarea>
+
+<button onclick="sendEmergency()" data-key="support_form_send">إرسال الطوارئ</button>
+<button onclick="window.location.href='index.html'">الصفحة الرئيسية</button>
+</div>
+
+<script>
+async function sendEmergency() {
+    const user = document.getElementById('user').value;
+    const issue = document.getElementById('issue').value;
+    const details = document.getElementById('details').value;
+    try {
+        const res = await fetch('/api/support', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({user, issue, details})
+        });
+        if(res.ok) alert('تم إرسال طلب الطوارئ بنجاح!');
+        else alert('حدث خطأ أثناء الإرسال.');
+    } catch(e) { console.error('Error:',e); alert('خطأ في الاتصال بالخادم'); }
+}
+
+// همبرغر
+const toggleButton = document.querySelector('.menu-toggle');
+const menu = document.querySelector('.menu');
+toggleButton.addEventListener('click', () => { menu.classList.toggle('show'); });
+
+</script>
+
+<script>
+const lamp = document.querySelector(".lamp-head");
+const cord = document.querySelector(".lamp-cord");
+const root = document.documentElement;
+
+let pulling = false;
+let startY = 0;
+
+/* تحميل الثيم المحفوظ */
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  root.setAttribute("data-theme", savedTheme);
+}
+
+lamp.addEventListener("mousedown", e => {
+  pulling = true;
+  startY = e.clientY;
+  lamp.style.cursor = "grabbing";
+});
+
+window.addEventListener("mousemove", e => {
+  if (!pulling) return;
+
+  let distance = e.clientY - startY;
+  if (distance < 0) distance = 0;
+  if (distance > 120) distance = 120;
+
+  lamp.style.transform = `translateY(${distance}px)`;
+  cord.style.height = 130 + distance + "px";
+});
+
+window.addEventListener("mouseup", () => {
+  if (!pulling) return;
+  pulling = false;
+
+  lamp.style.transform = "translateY(0)";
+  cord.style.height = "130px";
+  lamp.style.cursor = "grab";
+
+  /* تبديل الثيم */
+  const current = root.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  root.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+});
+
+async function sendEmergency() {
+    const user = document.getElementById('user').value;
+    const issue = document.getElementById('issue').value;
+    const details = document.getElementById('details').value;
+
+    try {
+        const res = await fetch("/api/support/telegram", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user, issue, details })
+        });
+        if(res.ok) alert('تم إرسال طلب الطوارئ بنجاح!');
+        else alert('حدث خطأ أثناء الإرسال.');
+    } catch(e) {
+        console.error(e);
+        alert('خطأ في الاتصال بالخادم');
+    }
+}
+
+res.send(`<html><body>${escapeHtml(page.content)}</body></html>`);
+
+</script>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

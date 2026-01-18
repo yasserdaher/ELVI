@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="responsive.css">
+<link rel="icon" href="/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>خدماتنا - Electron Vision</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background: #0b0b0d;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* شريط تنقل */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(15, 15, 20, 0.8);
+    backdrop-filter: blur(6px);
+    padding: 14px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    z-index: 2000;
+}
+
+nav .title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #f4e6c1;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: 0.25s;
+}
+
+nav ul li:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+/* فراغ فوق المحتوى */
+.spacer {
+    height: 85px;
+}
+
+/* حواف مضيئة */
+.glow-box {
+    width: 85%;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.04);
+    padding: 30px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 0 16px rgba(96, 180, 255, 0.22);
+}
+
+/* العناوين */
+h1, h2 {
+    color: #7a6ad6;
+}
+
+/* الفقرات */
+p {
+    font-size: 1.2rem;
+    opacity: 0.85;
+    line-height: 1.6;
+}
+
+/* أيقونات الخدمات */
+.service-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    background: rgba(255,255,255,0.05);
+    padding: 18px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    transition: 0.3s;
+}
+
+.service-item:hover {
+    background: rgba(255, 217, 0, 0.15);
+    color: #000;
+}
+
+.service-item .icon {
+    font-size: 2rem;
+    color: #00bfff;
+}
+
+/* ----------------------------- */
+/* جعل الصفحة مرنة بدون كسر التصميم */
+/* ----------------------------- */
+
+html, body {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+.container, header, main, footer, section, article {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+button, a {
+    min-width: 40px;
+    min-height: 40px;
+    word-wrap: break-word;
+}
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 3000;
+}
+
+.hamburger span {
+    width: 26px;
+    height: 3px;
+    background: #f4e6c1;
+    border-radius: 4px;
+    transition: 0.35s ease;
+}
+
+/* عند الفتح */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+
+/* الوضع المتجاوب */
+@media (max-width: 980px) {
+nav ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+
+    background: rgba(8,8,12,0.97);
+    backdrop-filter: blur(14px);
+
+    padding: 24px 0;
+
+    clip-path: circle(0% at 95% 0%);
+    transition: clip-path 0.55s ease-in-out;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    z-index: 2500;
+}
+
+nav ul.show {
+    clip-path: circle(160% at 95% 0%);
+}
+
+    nav ul li {
+        text-align: center;
+        padding: 12px;
+        font-size: 1.05rem;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+}
+
+
+/* الأجهزة اللوحية */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 15px !important;
+    }
+}
+
+/* زر الهمبرغر مخفي على الكمبيوتر */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* ================= LIGHT THEME ================= */
+:root[data-theme="light"] {
+
+  /* الخلفيات */
+  --bg-main: #f4f7fb;              /* خلفية عامة فخمة */
+  --bg-nav: rgba(255,255,255,0.78);
+  --bg-card: rgba(255,255,255,0.65);
+  --bg-soft: #eef2f7;
+
+  /* النصوص */
+  --text-main: #4b73a5;
+  --text-muted: #5f6b7a;
+  --text-nav: #1c2430;
+
+  /* ألوان تقنية */
+  --blue-main: #2563eb;
+  --blue-soft: rgba(37,99,235,0.12);
+  --blue-glow: rgba(37,99,235,0.35);
+
+  /* حدود وظلال */
+  --border-light: rgba(15,23,42,0.08);
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.08);
+  --shadow-strong: 0 20px 50px rgba(15,23,42,0.12);
+}
+
+/* ================= BODY ================= */
+:root[data-theme="light"] body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ================= NAV ================= */
+:root[data-theme="light"] nav {
+  background: var(--bg-nav);
+  border-bottom: 1px solid var(--border-light);
+  backdrop-filter: blur(14px);
+}
+
+:root[data-theme="light"] nav .title {
+  color: var(--text-main);
+}
+
+/* ================= NAV ITEMS ================= */
+:root[data-theme="light"] nav ul li {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] nav ul li:hover {
+  background: var(--blue-soft);
+  color: var(--blue-main);
+}
+
+/* ================= PROFILE ================= */
+:root[data-theme="light"] nav .profile {
+  background: var(--blue-main);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+}
+
+/* ================= HERO ================= */
+:root[data-theme="light"] .hero h1 {
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .hero p {
+  color: var(--text-muted);
+}
+
+/* ================= GLOW BOX ================= */
+:root[data-theme="light"] .glow-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+/* ================= ITEMS ================= */
+:root[data-theme="light"] .item {
+  background: var(--bg-soft);
+  color: var(--text-main);
+}
+
+:root[data-theme="light"] .item:hover {
+  background: var(--blue-main);
+  color: #fff;
+}
+
+/* ================= LOGO ================= */
+:root[data-theme="light"] .logo-square {
+  border-color: var(--blue-main);
+  background: rgba(255,255,255,0.75);
+  box-shadow:
+    0 0 20px var(--blue-glow),
+    inset 0 0 8px rgba(255,255,255,0.6);
+}
+
+:root[data-theme="light"] .logo-square img {
+  filter: drop-shadow(0 0 6px var(--blue-glow));
+}
+
+/* ================= LETTER BG ================= */
+:root[data-theme="light"] .letter {
+  color: rgba(37,99,235,0.08);
+}
+
+/* ================= HAMBURGER ================= */
+:root[data-theme="light"] .hamburger span {
+  background: var(--text-main);
+}
+
+/* ================= LAMP ================= */
+
+.lamp-wrapper {
+  position: fixed;
+  left: 26px;
+  top: 0;
+  z-index: 5000;
+  user-select: none;
+    pointer-events: none;
+}
+
+.lamp-cord {
+  width: 3px;
+  height: 130px;
+  background: linear-gradient(#444, #111);
+  margin: auto;
+  transition: height 0.25s ease;
+}
+
+.lamp-head {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  cursor: grab;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,0.7),
+    0 0 12px rgba(0,0,0,0.6);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+      pointer-events: auto;
+
+}
+
+/* ===== لمبة شغالة (لايت مود) ===== */
+:root[data-theme="light"] .lamp-head {
+  background: #ffe08a;
+  box-shadow:
+    0 0 35px rgba(255,208,120,0.95),
+    0 0 80px rgba(255,208,120,0.45);
+}
+
+/* ===== Hover خفيف ===== */
+.lamp-head:hover {
+  transform: scale(1.05);
+}
+
+</style>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js" defer></script>
+</head>
+<body>
+   <!-- Lamp Toggle -->
+<div class="lamp-wrapper">
+  <div class="lamp-cord"></div>
+  <div class="lamp-head"></div>
+</div>
+</script>
+
+<script>
+const lamp = document.querySelector(".lamp-head");
+const cord = document.querySelector(".lamp-cord");
+const root = document.documentElement;
+
+let pulling = false;
+let startY = 0;
+
+/* تحميل الثيم المحفوظ */
+async function loadTheme() {
+    try {
+        const authRes = await fetch("/auth/status", { credentials: "include" });
+        const auth = await authRes.json();
+        if (auth.loggedIn) {
+            const themeRes = await fetch("/api/user-theme", { credentials: "include" });
+            const themeData = await themeRes.json();
+            root.setAttribute("data-theme", themeData.theme);
+        } else {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                root.setAttribute("data-theme", savedTheme);
+            }
+        }
+    } catch (e) {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            root.setAttribute("data-theme", savedTheme);
+        }
+    }
+}
+loadTheme();
+
+lamp.addEventListener("mousedown", e => {
+  pulling = true;
+  startY = e.clientY;
+  lamp.style.cursor = "grabbing";
+});
+
+window.addEventListener("mousemove", e => {
+  if (!pulling) return;
+
+  let distance = e.clientY - startY;
+  if (distance < 0) distance = 0;
+  if (distance > 120) distance = 120;
+
+  lamp.style.transform = `translateY(${distance}px)`;
+  cord.style.height = 130 + distance + "px";
+});
+
+window.addEventListener("mouseup", () => {
+  if (!pulling) return;
+  pulling = false;
+
+  lamp.style.transform = "translateY(0)";
+  cord.style.height = "130px";
+  lamp.style.cursor = "grab";
+
+  /* تبديل الثيم */
+  const current = root.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  root.setAttribute("data-theme", next);
+  
+  // حفظ الثيم
+  fetch("/auth/status", { credentials: "include" })
+    .then(res => res.json())
+    .then(auth => {
+        if (auth.loggedIn) {
+            fetch("/api/user-theme", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ theme: next })
+            });
+        } else {
+            localStorage.setItem("theme", next);
+        }
+    })
+    .catch(() => {
+        localStorage.setItem("theme", next);
+    });
+});
+</script>
+
+<!-- شريط التنقل -->
+<nav>
+    <div class="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+
+    <button class="menu-toggle">&#9776;</button>
+    <div class="title">شركتنا</div>
+    <ul id="nav-links">
+        <li onclick="window.location.href='index.html'">الصفحة الرئيسية</li>
+        <li onclick="window.location.href='products.html'">المنتجات</li>
+        <li onclick="window.location.href='store.html'">المتجر</li>
+        <li onclick="window.location.href='social.html'">وسائل التواصل</li>
+    </ul>
+</nav>
+
+<div class="spacer"></div>
+
+<!-- خدماتنا -->
+<div class="glow-box">
+    <h1>خدمات شركة Electron Vision</h1>
+    <p>
+        نقدم مجموعة من الخدمات التقنية المتقدمة لمساعدة شركاتك على النمو والتطوير.
+    </p>    
+
+    <div class="service-item">
+        <div class="icon">💻</div>
+        <div>
+            <h2>تصميم مواقع إلكترونية</h2>
+            <p>نقوم بإنشاء مواقع إلكترونية حديثة ومتجاوبة تلبي احتياجات عملك وتعزز حضورك الرقمي.</p>
+        </div>
+    </div>
+
+    <div class="service-item">
+        <div class="icon">🛠️</div>
+        <div>
+            <h2>حل المشكلات البرمجية</h2>
+            <p>تصحيح الأخطاء، تحديث الأنظمة، وتثبيت البرمجيات بطريقة احترافية وآمنة.</p>
+        </div>
+    </div>
+
+    <div class="service-item">
+        <div class="icon">🏢</div>
+        <div>
+            <h2>زيارة فرعنا الرئيسي</h2>
+            <p>في حال لم يتم ارضائك ، نوفر لك دعم مباشر في مكتبنا مع فريق متخصص.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// زر الهامبرغر
+const toggleButton = document.querySelector('.menu-toggle');
+const menu = document.querySelector('ul.menu');
+
+toggleButton.addEventListener('click', () => {
+    menu.classList.toggle('show');
+});
+
+// تسجيل الدخول / الخروج
+async function checkLoginStatus() {
+  try {
+    const res = await fetch('/api/points', { credentials: 'include' });
+    const loginStatus = document.getElementById('loginStatus');
+    if (!loginStatus) return;
+    if (res.ok) {
+      loginStatus.innerHTML = '<button onclick="logout()">تسجيل الخروج</button>';
+    } else {
+      loginStatus.innerHTML = '<button onclick="window.location.href=\'login.html\'">تسجيل الدخول</button>';
+    }
+  } catch (e) {
+    const loginStatus = document.getElementById('loginStatus');
+    if (!loginStatus) return;
+    loginStatus.innerHTML = '<button onclick="window.location.href=\'login.html\'">تسجيل الدخول</button>';
+  }
+}
+
+async function logout() {
+  try {
+    await fetch('/admin-logout', { method: 'POST', credentials: 'include' });
+    alert('تم تسجيل الخروج بنجاح');
+    window.location.reload();
+  } catch (e) {
+    alert('خطأ أثناء تسجيل الخروج');
+  }
+}
+
+window.onload = checkLoginStatus;
+function toggleMenu() {
+    const nav = document.getElementById("nav-links");
+    const burger = document.querySelector(".hamburger");
+
+    nav.classList.toggle("show");
+    burger.classList.toggle("active");
+}
+
+</script>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

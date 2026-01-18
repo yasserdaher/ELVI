@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم الأدمن - ELVI</title>
+<link rel="icon" href="/favicon.png">
+<style>:root {
+  --bg-main: #0a0c10;
+  --bg-secondary: #0f1218;
+  --bg-card: rgba(255,255,255,0.06);
+  --border-soft: rgba(255,255,255,0.12);
+
+  --gold: #f5d37a;
+  --gold-dark: #cfae50;
+  --blue-accent: #3fa9f5;
+  --danger: #ff4b5c;
+
+  --text-main: #ffffff;
+  --text-muted: #b5b5b5;
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --transition-fast: 0.25s ease;
+  --transition-smooth: 0.4s cubic-bezier(.4,0,.2,1);
+}
+.has-new::after {
+    content: "●";
+    color: red;
+    margin-right: 6px;
+}
+
+
+
+/* ====== GLOBAL ====== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #10131a, #07080b);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* ====== LOGIN ====== */
+#login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(145deg, #0b0d12, #05060a);
+}
+
+#login input {
+  margin: 10px 0;
+  padding: 12px 14px;
+  width: 260px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  background: var(--bg-secondary);
+  color: var(--text-main);
+  transition: var(--transition-fast);
+}
+
+#login input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(245,211,122,0.2);
+}
+
+#login button {
+  width: 280px;
+  padding: 12px;
+  margin-top: 14px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+#login button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(245,211,122,0.35);
+}
+
+/* ====== SIDEBAR ====== */
+aside {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  background: linear-gradient(180deg, #0e1117, #080a0f);
+  padding: 24px 18px;
+  display: none;
+  overflow-y: auto;
+  border-right: 1px solid var(--border-soft);
+}
+
+aside h2 {
+  color: var(--gold);
+  margin-bottom: 24px;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+}
+
+aside button {
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+aside button:hover {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #000;
+  transform: translateX(4px);
+}
+
+/* ====== MAIN ====== */
+main {
+  margin-right: 280px;
+  padding: 40px;
+  display: none;
+}
+
+.section {
+  display: none;
+}
+
+/* ====== CARDS ====== */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  transition: var(--transition-smooth);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+}
+
+/* ====== FORMS ====== */
+input, textarea, select {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--blue-accent);
+  box-shadow: 0 0 0 2px rgba(63,169,245,0.2);
+}
+
+/* ====== ACTION BUTTONS ====== */
+button.action {
+  margin-top: 12px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  border: none;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+button.action:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ====== DELETE ====== */
+button.delete {
+  background: var(--danger);
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+button.delete:hover {
+  background: #ff1c1c;
+}
+
+/* ====== TABLES ====== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+thead tr {
+  background: #141823;
+  color: var(--gold);
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid var(--border-soft);
+  text-align: center;
+}
+
+tbody tr:nth-child(even) {
+  background: #0d1016;
+}
+
+tbody tr:hover {
+  background: #1a1f2b;
+}
+
+/* ====== REFRESH INDICATOR ====== */
+.refresh-indicator {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  box-shadow: 0 0 12px rgba(245,211,122,0.9);
+  z-index: 1000;
+}
+
+.refresh-indicator.active {
+  opacity: 1;
+}
+
+</style>
+</head>
+<body>
+
+<!-- مؤشر التحديث التلقائي -->
+<div class="refresh-indicator" id="refreshIndicator"></div>
+
+<!-- تسجيل دخول الأدمن -->
+<div id="login">
+    <h2>🔐 تسجيل دخول الأدمن</h2>
+    <input id="user" placeholder="اسم المستخدم">
+    <input id="pass" type="password" placeholder="كلمة المرور">
+    <button onclick="login()">دخول</button>
+</div>
+
+<!-- القائمة الجانبية -->
+<aside id="sidebar">
+    <h2>ELVI Admin</h2>
+    <button data-section="support" onclick="showSection('support')">📩 دعم سريع</button>
+<button data-section="contact" onclick="showSection('contact')">💬 تواصل</button>
+<button data-section="products" onclick="showSection('products')">📦 منتجات</button>
+
+    <button id="toggleRefreshBtn" onclick="toggleAutoRefresh()" style="background:#f5d37a; color:#000;"> التحديث التلقائي</button>
+    <button onclick="logout()">🚪 تسجيل خروج</button>
+</aside>
+
+<main id="panel">
+    <!-- دعم -->
+    <div id="support" class="section">
+        <h2>📩 دعم سريع</h2>
+        <table id="supportTable">
+            <thead>
+                <tr>
+                    <th>اسم</th>
+                    <th>ايميل / رقم الهاتف</th>
+                    <th>مشكلة</th>
+                    <th>إجراء</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- تواصل -->
+    <div id="contact" class="section">
+        <h2>💬 تواصل</h2>
+        <table id="contactTable">
+            <thead>
+                <tr>
+                    <th>اسم</th>
+                    <th>ايميل</th>
+                    <th>رقم الهاتف</th>
+                    <th>مشكلة</th>
+                    <th>إجراء</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- منتجات -->
+    <div id="products" class="section">
+        <h2>📦 إدارة المنتجات</h2>
+        <div class="card">
+            <input id="productName" placeholder="اسم المنتج">
+            <textarea id="productDesc" placeholder="وصف المنتج"></textarea>
+            <input id="productPrice" type="number" placeholder="السعر (للمدفوع)">
+            <select id="productType">
+                <option value="free">مجاني</option>
+                <option value="paid">مدفوع</option>
+            </select>
+            <input type="file" id="productFile">
+            <button class="action" onclick="addProduct()">إضافة منتج</button>
+        </div>
+        <div id="productsList"></div>
+    </div>
+
+    <!-- ألوان الموقع -->
+    <div id="theme" class="section">
+        <h2>🎨 ألوان الموقع</h2>
+        <div class="card">
+            <label>خلفية body:</label>
+            <input type="color" id="bgColor" class="color-input">
+            <label>لون النص:</label>
+            <input type="color" id="textColor" class="color-input">
+            <button class="action" onclick="saveTheme()">حفظ الألوان</button>
+        </div>
+    </div>
+
+    <!-- تحرير الصفحة الرئيسية -->
+    <div id="editHomepage" class="section">
+        <h2>🖼️ الصفحة الرئيسية</h2>
+        <iframe id="homepagePreview" src="index.html" style="width:100%; height:500px; border:1px solid #ccc;"></iframe>
+        <div class="controls">
+            <button onclick="enableEditMode()">تفعيل التعديل</button>
+            <button onclick="saveHomepage()">حفظ التعديلات</button>
+            <input type="file" id="uploadImage" accept="image/*">
+            <button onclick="uploadImage()">رفع صورة</button>
+        </div>
+    </div>
+
+
+<script>
+let editMode=false;
+let currentSection=null;
+let lastSupportData = null;
+let lastContactData = null;
+
+
+function showSection(id){
+    document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+    const sec=document.getElementById(id);
+    if(sec){
+        sec.style.display='block';
+        currentSection=id;
+    }
+
+    // 🔥 إزالة علامة الجديد
+    const btn = document.querySelector(`[data-section="${id}"]`);
+    if (btn) btn.classList.remove("has-new");
+
+    if(id==='support'||id==='contact') fetchMessages();
+    if(id==='products') loadProducts();
+    if(id==='theme') loadTheme();
+    if(id==='pages') loadPagesList();
+}
+
+
+async function login(){
+    const username=document.getElementById("user").value;
+    const password=document.getElementById("pass").value;
+    const res=await fetch("/admin-login",{ method:"POST", headers:{"Content-Type":"application/json"}, credentials:"include", body: JSON.stringify({username,password}) });
+    const data=await res.json();
+    if(data.ok){
+      unlockAudio();
+    document.getElementById("login").style.display="none";
+    document.getElementById("sidebar").style.display="block";
+    document.getElementById("panel").style.display="block";
+
+    showSection('support');
+
+    setTimeout(startAdminEvents, 300);
+    } else alert("بيانات خاطئة");
+}
+function markSectionAsNew(section) {
+    const btn = document.querySelector(`[data-section="${section}"]`);
+    if (btn) btn.classList.add("has-new");
+}
+
+function showAdminNotification(text) {
+    try {
+        const audio = new Audio("/notify.mp3");
+        audio.play().catch(()=>{});
+    } catch(e){}
+
+    const n = document.createElement("div");
+    n.textContent = text;
+    n.style.cssText = `
+        position:fixed;
+        bottom:20px;
+        left:20px;
+        background:#111;
+        color:#fff;
+        padding:12px 18px;
+        border-radius:12px;
+        box-shadow:0 10px 30px rgba(0,0,0,.4);
+        z-index:9999;
+    `;
+    document.body.appendChild(n);
+    setTimeout(()=>n.remove(),3000);
+}
+
+
+
+async function logout(){ await fetch("/admin-logout",{method:"POST",credentials:"include"}); location.reload(); }
+
+// عرض الرسائل في الجداول
+async function fetchMessages(){
+    try {
+        // جلب بيانات الدعم
+        if(currentSection === 'support' || currentSection === null) {
+const resSupport = await fetch('/api/support', { credentials:'include' });
+            const supportData = await resSupport.json();
+
+            // التحقق من التغيير
+            if(JSON.stringify(supportData) !== JSON.stringify(lastSupportData)) {
+                lastSupportData = supportData;
+                const supportTbody = document.querySelector('#supportTable tbody');
+               supportTbody.innerHTML = supportData.map(m=>`
+<tr>
+  <td>${m.user}</td>
+  <td>${m.issue}</td>
+  <td>${m.details}</td>
+  <td><button class="delete" onclick="deleteSupport('${m.id}')">حذف</button></td>
+</tr>
+`).join('');
+
+
+            }
+        }
+
+        // جلب بيانات التواصل
+        if(currentSection === 'contact' || currentSection === null) {
+            const resContact = await fetch('/api/contact', { credentials:'include' });
+            const contactData = await resContact.json();
+
+            // التحقق من التغيير
+            if(JSON.stringify(contactData) !== JSON.stringify(lastContactData)) {
+                lastContactData = contactData;
+                const contactTbody = document.querySelector('#contactTable tbody');
+                contactTbody.innerHTML = contactData.map(m=>`
+                    <tr>
+                        <td>${m.name}</td>
+                        <td>${m.email}</td>
+                        <td>${m.phone}</td>
+                        <td>${m.message}</td>
+                        <td><button class="delete" onclick="deleteContact('${m.id}')">حذف</button></td>
+                    </tr>
+                `).join('');
+            }
+        }
+    } catch(error) {
+        console.error('خطأ في جلب الرسائل:', error);
+    }
+}
+
+// حذف الرسائل
+async function deleteSupport(id){
+    if(!confirm('هل تريد حذف هذه الرسالة؟')) return;
+    await fetch(`/api/support/${id}`,{ method:'DELETE', credentials:'include' });
+    fetchMessages();
+}
+async function deleteContact(id){
+    if(!confirm('هل تريد حذف هذه الرسالة؟')) return;
+    await fetch(`/api/contact/${id}`,{ method:'DELETE', credentials:'include' });
+    fetchMessages();
+}
+
+// باقي الوظائف بدون تعديل
+async function addProduct(){ const form=new FormData(); form.append('name',document.getElementById("productName").value); form.append('description',document.getElementById("productDesc").value); form.append('price',document.getElementById("productPrice").value); form.append('type',document.getElementById("productType").value); const file=document.getElementById("productFile").files[0]; if(file) form.append('file',file); await fetch("/api/products",{ method:'POST', body:form, credentials:'include' }); loadProducts(); }
+async function loadTheme(){ const res=await fetch("/api/theme",{ credentials:'include' }); const data=await res.json(); document.getElementById('bgColor').value=data.bg || '#0b0b0d'; document.getElementById('textColor').value=data.text || '#fff'; }
+async function saveTheme(){ const bg=document.getElementById('bgColor').value; const text=document.getElementById('textColor').value; await fetch("/api/theme",{ method:'POST', headers:{ "Content-Type":"application/json" }, credentials:'include', body:JSON.stringify({ bg,text }) }); alert('تم حفظ الألوان'); }
+function enableEditMode(){ const iframe=document.getElementById('homepagePreview'); const doc=iframe.contentDocument||iframe.contentWindow.document; if(!editMode){ editMode=true; doc.body.contentEditable=true; doc.body.querySelectorAll('*').forEach(el=>el.classList.add('editable')); alert('تم تفعيل وضع التعديل'); } else alert('وضع التعديل مفعل بالفعل'); }
+
+let eventSource = null;
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+
+    const audio = new Audio("/notify.mp3");
+    audio.volume = 0;
+    audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audioUnlocked = true;
+        console.log("🔓 تم تفعيل الصوت");
+    }).catch(() => {});
+}
+
+
+function startAdminEvents() {
+    if (eventSource) return;
+
+    eventSource = new EventSource("/api/admin/events");
+
+    eventSource.onmessage = (event) => {
+    const { type } = JSON.parse(event.data);
+    const indicator = document.getElementById("refreshIndicator");
+indicator.classList.add("active");
+setTimeout(()=>indicator.classList.remove("active"), 600);
+
+
+    showAdminNotification("رسالة جديدة في قسم " + type);
+
+    if (type === "support") {
+        markSectionAsNew("support");
+        if (currentSection === "support") fetchMessages();
+    }
+
+    if (type === "contact") {
+        markSectionAsNew("contact");
+        if (currentSection === "contact") fetchMessages();
+    }
+};
+    eventSource.onopen = () => {
+        console.log("اتصال الأدمن مفتوح");
+    };
+
+    eventSource.onerror = () => {
+        eventSource.close();
+        eventSource = null;
+        setTimeout(startAdminEvents, 5000);
+    };
+  
+}
+
+
+// حذف منتج من لوحة الأدمن
+async function deleteProduct(id) {
+  try {
+    const res = await fetch(`/api/products/${id}`, {
+      method: "DELETE",
+      credentials: "include"
+    });
+
+    const data = await res.json();
+    if (data.ok) {
+      // إعادة تحميل المنتجات بعد الحذف
+      loadProducts();
+      alert("تم حذف المنتج بنجاح");
+    } else {
+      alert("حدث خطأ أثناء الحذف");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("فشل الاتصال بالسيرفر");
+  }
+}
+
+// تحميل المنتجات وعرضها
+async function loadProducts() {
+  const container = document.getElementById("productsList");
+  try {
+    const res = await fetch("/api/products", { credentials: "include" });
+    const data = await res.json();
+    
+    if (!data.length) {
+      container.innerHTML = "<p>لا توجد منتجات</p>";
+      return;
+    }
+
+    container.innerHTML = data
+      .map(p => `
+        <div class="card">
+          <strong>${p.name}</strong> ${p.price ? "- $" + p.price : ""} <br>
+          ${p.description || ""}
+          ${p.file ? `<a href="${p.file}" target="_blank">تحميل الملف</a>` : ""}
+          <br>
+          <button class="delete" onclick="deleteProduct('${p.id}')">حذف</button>
+        </div>
+      `)
+      .join("");
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = "<p>فشل تحميل المنتجات</p>";
+  }
+}
+
+
+</script>
+</body>
+</html>

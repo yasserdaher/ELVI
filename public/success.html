@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>تم الدفع بنجاح</title>
+<link rel="stylesheet" href="responsive.css">
+
+<style>
+  /* ----------------------------- */
+/* جعل الصفحة مرنة بدون كسر التصميم */
+/* ----------------------------- */
+
+/* ضبط الـViewport */
+html, body {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* الصور والفيديوهات */
+img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* الحاويات الرئيسية */
+.container, header, main, footer, section, article {
+    width: 100%;
+    max-width: 1200px; /* يحافظ على العرض الحالي للكبير */
+    margin: auto;
+}
+
+/* القوائم والأزرار */
+button, a {
+    min-width: 40px;
+    min-height: 40px;
+    word-wrap: break-word;
+}
+
+/* ----------- Media Queries للأجهزة الصغيرة ----------- */
+
+/* الهواتف */
+@media (max-width: 768px) {
+    .container, header, main, footer, section, article {
+        padding: 10px !important; /* يضيف مسافة بدون كسر التصميم */
+    }
+    
+    nav, .menu, ul {
+        display: block !important; /* القوائم تتحول عمود */
+    }
+    
+    button, a {
+        width: 100% !important; /* الأزرار تمتد لعرض الهاتف */
+    }
+}
+
+/* الأجهزة اللوحية */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 15px !important;
+    }
+}
+
+body { font-family:Poppins,sans-serif; background:#0b0b0d; color:#fff; text-align:center; padding:50px;}
+h1 { color:#f5d37a; }
+button { padding:12px 20px; margin-top:20px; border:none; border-radius:10px; background:#f5d37a; cursor:pointer; font-weight:bold;}
+button:hover { background:#ffe9b0; color:#000;}
+nav { background:#111; padding:10px 0; position:relative;}
+nav .title { font-size:24px; font-weight:bold; margin-left:20px;}
+nav ul { list-style:none; padding:0; display:flex; justify-content:flex-end; margin-right:20px;}
+nav ul li { margin:0 15px; cursor:pointer; transition:color 0.3s;}
+nav ul li:hover { color:#f5d37a;}
+/* زر الهمبرغر مخفي على الكمبيوتر */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit; /* يطابق لون النص */
+    position: absolute; /* لضبط مكانه */
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* على الهواتف فقط */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+}
+
+</style>
+</head>
+<body>
+<nav>
+  <div class="title">شركتنا</div>
+  <ul>
+    <li onclick="window.location.href='index.html'">الصفحة الرئيسية</li>
+    <li onclick="window.location.href='products.html'">المنتجات</li>
+    <li onclick="window.location.href='store.html'">المتجر</li>
+    <li id="loginStatus"></li>
+  </ul>
+</nav>
+<h1>🎉 تم الدفع بنجاح!</h1>
+<p>شكرًا لاشتراكك، يمكنك الآن استخدام المنتج.</p>
+<button onclick="window.location.href='store.html'">العودة للمتجر</button>
+<script src="/language.js" defer></script>
+
+</body>
+</html>

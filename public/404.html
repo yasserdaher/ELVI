@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - الصفحة غير موجودة | ELECTRON VISION</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+        font-family: 'Orbitron', sans-serif;
+        background: radial-gradient(circle at center, #0f0c29, #302b63, #24243e);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #fff;
+        perspective: 1000px;
+    }
+
+    /* ===== Particles ===== */
+    .particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+    }
+    .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        opacity: 0.7;
+        animation: float 6s ease-in-out infinite;
+        mix-blend-mode: screen;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-40px) rotate(180deg); }
+    }
+
+    /* ===== Container ===== */
+    .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        animation: fadeIn 2s ease forwards;
+    }
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(-50px);}
+        100% { opacity: 1; transform: translateY(0);}
+    }
+
+    /* ===== Error Code ===== */
+    .error-code {
+        font-size: 14vw;
+        font-weight: 900;
+        color: #ff6b6b;
+        text-shadow:
+            0 0 10px #ff6b6b,
+            0 0 20px #ff6b6b,
+            0 0 40px #ff6b6b,
+            0 0 80px #ff6b6b;
+        animation: flicker 1.5s infinite alternate;
+    }
+
+    @keyframes flicker {
+        0% { opacity: 1; text-shadow: 0 0 10px #ff6b6b; }
+        50% { opacity: 0.8; text-shadow: 0 0 20px #ff6b6b; }
+        100% { opacity: 1; text-shadow: 0 0 30px #ff6b6b; }
+    }
+
+    .error-message {
+        font-size: 2.5vw;
+        font-weight: bold;
+        margin: 10px 0;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: textGlow 2s infinite alternate;
+    }
+
+    @keyframes textGlow {
+        0% { filter: blur(0px); }
+        50% { filter: blur(2px); }
+        100% { filter: blur(0px); }
+    }
+
+    .error-description {
+        font-size: 1.2vw;
+        color: #ccc;
+        margin-bottom: 30px;
+        line-height: 1.5;
+        text-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    .back-button {
+        display: inline-block;
+        padding: 18px 40px;
+        font-size: 1.2vw;
+        font-weight: bold;
+        text-decoration: none;
+        color: #fff;
+        border-radius: 50px;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        box-shadow: 0 0 20px #ff6b6b, 0 0 40px #4ecdc4, 0 0 60px #ff6b6b;
+        transition: all 0.4s ease;
+    }
+
+    .back-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px #ff6b6b, 0 0 60px #4ecdc4, 0 0 90px #ff6b6b;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+        .error-code { font-size: 25vw; }
+        .error-message { font-size: 6vw; }
+        .error-description { font-size: 4vw; }
+        .back-button { padding: 12px 25px; font-size: 4vw; }
+    }
+
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+    <div class="error-code">404</div>
+    <div class="error-message">الصفحة غير موجودة</div>
+    <div class="error-description">
+        عذراً، الصفحة التي تبحث عنها غير متوفرة. ربما تم حذفها أو نقلها إلى مكان آخر.
+    </div>
+    <a href="index.html" class="back-button">العودة إلى الرئيسية</a>
+</div>
+
+<script>
+    // ======== إنشاء جسيمات ========
+    function createParticles() {
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 60; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 5 + 2; // حجم عشوائي
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 6 + 's';
+            p.style.animationDuration = (4 + Math.random() * 4) + 's';
+            container.appendChild(p);
+        }
+    }
+    createParticles();
+</script>
+<script src="/language.js" defer></script>
+</body>
+</html>
